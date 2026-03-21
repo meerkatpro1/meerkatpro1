@@ -1,7 +1,2 @@
 # meerkatpro1
-# meerkatpro1
-# meerkatpro1
-# meerkatpro1
-# meerkatpro1
-# meerkatpro1
-# meerkatpro1
+This is a test site
