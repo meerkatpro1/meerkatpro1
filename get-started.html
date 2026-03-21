@@ -22,63 +22,50 @@
       height: 60px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
-
-    nav .logo {
-      color: #943030;
-      font-size: 1.2rem;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-    }
-
-    nav ul a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: color 0.2s;
-    }
-
+    nav .logo { color: #943030; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a { color: #ccc; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
     nav ul a:hover { color: #fff; }
 
     .game-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 3rem;
+      gap: 2.5rem;
       min-height: calc(100vh - 60px);
       padding: 2rem;
+      flex-wrap: wrap;
     }
 
     .maze-panel {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
-    .maze-label {
-      font-size: 0.85rem;
-      color: #556;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+    .hud {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: #667;
     }
+    .hud .level-badge {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 4px;
+      padding: 0.3rem 0.8rem;
+      color: #aac4e0;
+      letter-spacing: 0.05em;
+    }
+    .hud .level-badge span { color: #fff; font-weight: 700; font-size: 1rem; }
+    #statusMsg { font-size: 0.82rem; min-width: 180px; }
 
     canvas {
-      border: 2px solid #2a2a4a;
+      border: 2px solid #1a1a2e;
       border-radius: 4px;
       display: block;
-    }
-
-    .status {
-      font-size: 0.9rem;
-      color: #aac4e0;
-      min-height: 1.4em;
-      text-align: center;
     }
 
     .controls-panel {
@@ -89,17 +76,17 @@
     }
 
     .controls-label {
-      font-size: 0.85rem;
-      color: #556;
-      letter-spacing: 0.1em;
+      font-size: 0.72rem;
+      color: #445;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
 
     .dpad {
       display: grid;
-      grid-template-columns: repeat(3, 52px);
-      grid-template-rows: repeat(3, 52px);
-      gap: 4px;
+      grid-template-columns: repeat(3, 54px);
+      grid-template-rows: repeat(3, 54px);
+      gap: 5px;
     }
 
     .dpad button {
@@ -109,69 +96,43 @@
       color: #aac4e0;
       font-size: 1.3rem;
       cursor: pointer;
-      transition: background 0.1s, border-color 0.1s, transform 0.1s;
+      transition: background 0.1s, transform 0.08s;
       display: flex;
       align-items: center;
       justify-content: center;
       user-select: none;
     }
+    .dpad button:hover  { background: #22224a; border-color: #4a4a8a; }
+    .dpad button:active { background: #2d2d6a; transform: scale(0.92); }
 
-    .dpad button:hover {
-      background: #22224a;
-      border-color: #4a4a8a;
-    }
-
-    .dpad button:active {
-      background: #2d2d6a;
-      transform: scale(0.93);
-    }
-
-    .dpad .up    { grid-column: 2; grid-row: 1; }
-    .dpad .left  { grid-column: 1; grid-row: 2; }
-    .dpad .down  { grid-column: 2; grid-row: 2; }
-    .dpad .right { grid-column: 3; grid-row: 2; }
+    .dpad .btn-up    { grid-column: 2; grid-row: 1; }
+    .dpad .btn-left  { grid-column: 1; grid-row: 2; }
+    .dpad .btn-right { grid-column: 3; grid-row: 2; }
+    .dpad .btn-down  { grid-column: 2; grid-row: 3; }
 
     .reset-btn {
       background: #2a1a1a;
       border: 2px solid #4a2a2a;
       border-radius: 6px;
       color: #e94560;
-      font-size: 0.85rem;
-      padding: 0.5rem 1.2rem;
+      font-size: 0.8rem;
+      padding: 0.5rem 1.4rem;
       cursor: pointer;
       letter-spacing: 0.05em;
       transition: background 0.15s;
     }
-
     .reset-btn:hover { background: #3a2020; }
 
     .legend {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      font-size: 0.8rem;
-      color: #667;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      color: #556;
     }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .legend-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .legend-square {
-      width: 14px;
-      height: 14px;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
+    .legend-item { display: flex; align-items: center; gap: 0.55rem; }
+    .dot { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
+    .sq  { width: 13px; height: 13px; border-radius: 2px; flex-shrink: 0; }
   </style>
 </head>
 <body>
@@ -189,161 +150,298 @@
   <div class="game-wrapper">
 
     <div class="maze-panel">
-      <div class="maze-label">Maze</div>
-      <canvas id="mazeCanvas" width="540" height="468"></canvas>
-      <div class="status" id="status">Find the exit — use the arrows or keyboard</div>
+      <div class="hud">
+        <div class="level-badge">Level <span id="levelDisplay">1</span></div>
+        <div id="statusMsg" style="color:#667;">Find the orange exit</div>
+      </div>
+      <canvas id="mazeCanvas" width="540" height="540"></canvas>
     </div>
 
     <div class="controls-panel">
       <div class="controls-label">Controls</div>
-
       <div class="dpad">
-        <button class="up"    onclick="move(0,-1)">&#8593;</button>
-        <button class="left"  onclick="move(-1,0)">&#8592;</button>
-        <button class="down"  onclick="move(0,1)">&#8595;</button>
-        <button class="right" onclick="move(1,0)">&#8594;</button>
+        <button class="btn-up"    onclick="tryMove(0,-1)">&#8593;</button>
+        <button class="btn-left"  onclick="tryMove(-1,0)">&#8592;</button>
+        <button class="btn-right" onclick="tryMove(1,0)">&#8594;</button>
+        <button class="btn-down"  onclick="tryMove(0,1)">&#8595;</button>
       </div>
-
-      <button class="reset-btn" onclick="reset()">Reset</button>
-
+      <button class="reset-btn" onclick="resetGame()">Reset</button>
       <div class="legend">
-        <div class="legend-item">
-          <div class="legend-dot" style="background:#e94560;"></div>
-          <span>Player</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background:#4caf50;"></div>
-          <span>Exit</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-square" style="background:#1a1a2e; border:1px solid #2a2a4a;"></div>
-          <span>Wall</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-square" style="background:#1e1e3a; border:1px solid #2a2a5a;"></div>
-          <span>Path</span>
-        </div>
+        <div class="legend-item"><div class="dot" style="background:#e94560;"></div> You</div>
+        <div class="legend-item"><div class="dot" style="background:#9b59b6;"></div> Enemy</div>
+        <div class="legend-item"><div class="sq"  style="background:#ff8c00;"></div> Exit</div>
+        <div class="legend-item"><div class="sq"  style="background:#1e1e3a; border:1px solid #2a2a5a;"></div> Path</div>
       </div>
     </div>
 
   </div>
 
   <script>
-    const MAZE = [
-      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-      [1,0,0,0,1,0,0,0,0,0,1,0,0,0,1],
-      [1,0,1,0,1,0,1,1,0,1,1,0,1,0,1],
-      [1,0,1,0,0,0,0,1,0,0,0,0,1,0,1],
-      [1,0,1,1,1,1,0,1,0,1,1,1,1,0,1],
-      [1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
-      [1,1,1,0,1,1,1,1,0,1,0,1,1,0,1],
-      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,1,1,0,1,1,1,0,1,1,1,0,1,1],
-      [1,0,1,0,0,0,0,1,0,0,0,1,0,0,1],
-      [1,0,1,0,1,1,0,1,1,1,0,1,1,0,1],
-      [1,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
-      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    ];
+    const ROWS = 18, COLS = 18, CELL = 30, WALL = 3;
 
-    const ROWS = MAZE.length;
-    const COLS = MAZE[0].length;
-    const CELL = 36;
+    const canvas  = document.getElementById('mazeCanvas');
+    const ctx     = canvas.getContext('2d');
+    const levelEl = document.getElementById('levelDisplay');
+    const statusEl = document.getElementById('statusMsg');
 
-    const START = { x: 1, y: 1 };
-    const GOAL  = { x: 13, y: 11 };
+    let maze, explored, player, enemy, level, gameActive, enemyInterval;
 
-    const canvas = document.getElementById('mazeCanvas');
-    const ctx = canvas.getContext('2d');
-    const status = document.getElementById('status');
+    // ── Maze generation: iterative DFS (recursive backtracker) ───────────────
+    function generateMaze() {
+      const walls = Array.from({length: ROWS}, () =>
+        Array.from({length: COLS}, () =>
+          ({top: true, right: true, bottom: true, left: true})
+        )
+      );
+      const visited = Array.from({length: ROWS}, () => Array(COLS).fill(false));
+      const stack = [[0, 0]];
+      visited[0][0] = true;
 
-    let player = { ...START };
-    let won = false;
+      while (stack.length > 0) {
+        const [r, c] = stack[stack.length - 1];
+        const nbrs = [
+          {dr: -1, dc:  0, w: 'top',    ow: 'bottom'},
+          {dr:  1, dc:  0, w: 'bottom', ow: 'top'},
+          {dr:  0, dc: -1, w: 'left',   ow: 'right'},
+          {dr:  0, dc:  1, w: 'right',  ow: 'left'},
+        ].filter(({dr, dc}) => {
+          const nr = r + dr, nc = c + dc;
+          return nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && !visited[nr][nc];
+        });
 
-    function drawMaze() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (nbrs.length === 0) {
+          stack.pop();
+        } else {
+          const pick = nbrs[Math.floor(Math.random() * nbrs.length)];
+          const nr = r + pick.dr, nc = c + pick.dc;
+          walls[r][c][pick.w]    = false;
+          walls[nr][nc][pick.ow] = false;
+          visited[nr][nc] = true;
+          stack.push([nr, nc]);
+        }
+      }
+      return walls;
+    }
 
-      for (let row = 0; row < ROWS; row++) {
-        for (let col = 0; col < COLS; col++) {
-          const x = col * CELL;
-          const y = row * CELL;
+    // ── BFS pathfinding for enemy ─────────────────────────────────────────────
+    function bfsNextStep(fromR, fromC, toR, toC) {
+      if (fromR === toR && fromC === toC) return null;
+      const parent = Array.from({length: ROWS}, () => Array(COLS).fill(null));
+      parent[fromR][fromC] = [fromR, fromC];
+      const queue = [[fromR, fromC]];
+      let found = false;
 
-          if (MAZE[row][col] === 1) {
-            // Wall
-            ctx.fillStyle = '#1a1a2e';
-            ctx.fillRect(x, y, CELL, CELL);
-            // subtle inner shadow
-            ctx.fillStyle = 'rgba(0,0,0,0.3)';
-            ctx.fillRect(x+1, y+1, CELL-2, CELL-2);
-          } else {
-            // Path
-            ctx.fillStyle = '#1e1e3a';
-            ctx.fillRect(x, y, CELL, CELL);
-            // subtle grid line
-            ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-            ctx.strokeRect(x, y, CELL, CELL);
+      outer: while (queue.length > 0) {
+        const [r, c] = queue.shift();
+        const dirs = [
+          {nr: r-1, nc: c,   blocked: maze[r][c].top},
+          {nr: r+1, nc: c,   blocked: maze[r][c].bottom},
+          {nr: r,   nc: c-1, blocked: maze[r][c].left},
+          {nr: r,   nc: c+1, blocked: maze[r][c].right},
+        ];
+        for (const {nr, nc, blocked} of dirs) {
+          if (!blocked && nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && !parent[nr][nc]) {
+            parent[nr][nc] = [r, c];
+            if (nr === toR && nc === toC) { found = true; break outer; }
+            queue.push([nr, nc]);
           }
         }
       }
 
-      // Draw goal
-      const gx = GOAL.x * CELL + CELL / 2;
-      const gy = GOAL.y * CELL + CELL / 2;
-      ctx.fillStyle = '#4caf50';
-      ctx.beginPath();
-      ctx.arc(gx, gy, CELL * 0.35, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#fff';
-      ctx.font = `bold ${CELL * 0.4}px sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('E', gx, gy);
+      if (!found) return null;
 
-      // Draw player
-      const px = player.x * CELL + CELL / 2;
-      const py = player.y * CELL + CELL / 2;
+      // Trace back to find the first step from `from`
+      let [r, c] = [toR, toC];
+      while (!(parent[r][c][0] === fromR && parent[r][c][1] === fromC)) {
+        [r, c] = parent[r][c];
+      }
+      return {r, c};
+    }
+
+    // ── Fog of war ────────────────────────────────────────────────────────────
+    function markExplored(r, c) {
+      // Mark this cell and its 4 neighbours as visible
+      [[r,c],[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([nr, nc]) => {
+        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) explored[nr][nc] = true;
+      });
+    }
+
+    // ── Drawing ───────────────────────────────────────────────────────────────
+    const COLOR_WALL  = '#09090f';
+    const COLOR_FLOOR = '#1e1e3a';
+    const COLOR_EXIT  = '#ff8c00';
+
+    function drawFloorCell(r, c, color) {
+      const x = c * CELL, y = r * CELL;
+      const w = maze[r][c];
+      const lt = w.left   ? WALL : 0;
+      const rt = w.right  ? WALL : 0;
+      const tt = w.top    ? WALL : 0;
+      const bt = w.bottom ? WALL : 0;
+      ctx.fillStyle = color;
+      ctx.fillRect(x + lt, y + tt, CELL - lt - rt, CELL - tt - bt);
+    }
+
+    function drawPlayer() {
+      const cx = player.c * CELL + CELL / 2;
+      const cy = player.r * CELL + CELL / 2;
+      const rad = CELL * 0.33;
+
+      // Body
       ctx.fillStyle = '#e94560';
       ctx.beginPath();
-      ctx.arc(px, py, CELL * 0.35, 0, Math.PI * 2);
+      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
       ctx.fill();
-      // player highlight
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+
+      // Directional arrow (triangle pointing outward from circle edge)
+      const dx = player.dir === 'right' ? 1 : player.dir === 'left'  ? -1 : 0;
+      const dy = player.dir === 'down'  ? 1 : player.dir === 'up'    ? -1 : 0;
+      const px = dy, py = -dx;           // perpendicular unit vector
+
+      const tipD  = rad + CELL * 0.20;   // tip distance from center
+      const baseD = rad * 0.45;          // base distance from center
+      const bHalf = CELL * 0.17;         // half-width of arrow base
+
+      ctx.fillStyle = '#fff';
       ctx.beginPath();
-      ctx.arc(px - CELL * 0.1, py - CELL * 0.1, CELL * 0.15, 0, Math.PI * 2);
+      ctx.moveTo(cx + dx * tipD,                     cy + dy * tipD);
+      ctx.lineTo(cx + dx * baseD + px * bHalf,       cy + dy * baseD + py * bHalf);
+      ctx.lineTo(cx + dx * baseD - px * bHalf,       cy + dy * baseD - py * bHalf);
+      ctx.closePath();
       ctx.fill();
     }
 
-    function move(dx, dy) {
-      if (won) return;
-      const nx = player.x + dx;
-      const ny = player.y + dy;
-      if (ny < 0 || ny >= ROWS || nx < 0 || nx >= COLS) return;
-      if (MAZE[ny][nx] === 1) return;
-      player.x = nx;
-      player.y = ny;
-      drawMaze();
-      if (player.x === GOAL.x && player.y === GOAL.y) {
-        won = true;
-        status.textContent = 'You reached the exit!';
-        status.style.color = '#4caf50';
+    function drawEnemy() {
+      if (!explored[enemy.r][enemy.c]) return;
+      const cx = enemy.c * CELL + CELL / 2;
+      const cy = enemy.r * CELL + CELL / 2;
+      const rad = CELL * 0.32;
+
+      ctx.fillStyle = '#9b59b6';
+      ctx.beginPath();
+      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#e8c1f4';
+      ctx.font = `bold ${Math.floor(CELL * 0.38)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('!', cx, cy);
+    }
+
+    function draw() {
+      // Background (walls show through as this color)
+      ctx.fillStyle = COLOR_WALL;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          if (!explored[r][c]) continue;
+          const isExit = (r === ROWS - 1 && c === COLS - 1);
+          drawFloorCell(r, c, isExit ? COLOR_EXIT : COLOR_FLOOR);
+        }
       }
+
+      drawEnemy();
+      drawPlayer();
     }
 
-    function reset() {
-      player = { ...START };
-      won = false;
-      status.textContent = 'Find the exit — use the arrows or keyboard';
-      status.style.color = '#aac4e0';
-      drawMaze();
+    // ── Game events ───────────────────────────────────────────────────────────
+    function caught() {
+      gameActive = false;
+      clearInterval(enemyInterval);
+      statusEl.textContent = 'Caught! Resetting to level 1…';
+      statusEl.style.color = '#e94560';
+      draw();
+      setTimeout(() => { level = 1; levelEl.textContent = level; initGame(); }, 1400);
     }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowUp')    { e.preventDefault(); move(0, -1); }
-      if (e.key === 'ArrowDown')  { e.preventDefault(); move(0,  1); }
-      if (e.key === 'ArrowLeft')  { e.preventDefault(); move(-1, 0); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); move(1,  0); }
+    function win() {
+      gameActive = false;
+      clearInterval(enemyInterval);
+      level++;
+      levelEl.textContent = level;
+      statusEl.textContent = `Level ${level} — new maze!`;
+      statusEl.style.color = '#4caf50';
+      draw();
+      setTimeout(initGame, 900);
+    }
+
+    // ── Player movement ───────────────────────────────────────────────────────
+    function tryMove(dc, dr) {
+      if (!gameActive) return;
+
+      // Update facing direction
+      if (dc ===  1) player.dir = 'right';
+      if (dc === -1) player.dir = 'left';
+      if (dr === -1) player.dir = 'up';
+      if (dr ===  1) player.dir = 'down';
+
+      // Wall check in current cell
+      const w = maze[player.r][player.c];
+      if (dc ===  1 && w.right)  { draw(); return; }
+      if (dc === -1 && w.left)   { draw(); return; }
+      if (dr === -1 && w.top)    { draw(); return; }
+      if (dr ===  1 && w.bottom) { draw(); return; }
+
+      player.r += dr;
+      player.c += dc;
+      markExplored(player.r, player.c);
+
+      if (player.r === enemy.r && player.c === enemy.c) { caught(); return; }
+      if (player.r === ROWS - 1 && player.c === COLS - 1) { win(); return; }
+
+      draw();
+    }
+
+    // ── Enemy tick ────────────────────────────────────────────────────────────
+    function enemyTick() {
+      if (!gameActive) return;
+      const next = bfsNextStep(enemy.r, enemy.c, player.r, player.c);
+      if (next) { enemy.r = next.r; enemy.c = next.c; }
+      if (enemy.r === player.r && enemy.c === player.c) { caught(); return; }
+      draw();
+    }
+
+    // ── Init / reset ──────────────────────────────────────────────────────────
+    function initGame() {
+      clearInterval(enemyInterval);
+      maze     = generateMaze();
+      explored = Array.from({length: ROWS}, () => Array(COLS).fill(false));
+      player   = {r: 0, c: 0, dir: 'right'};
+      enemy    = {r: ROWS - 1, c: 0};       // opposite corner from exit
+      gameActive = true;
+
+      statusEl.textContent = 'Find the orange exit';
+      statusEl.style.color = '#667';
+
+      markExplored(0, 0);
+      draw();
+
+      // Enemy starts moving after a short grace period
+      setTimeout(() => {
+        if (gameActive) enemyInterval = setInterval(enemyTick, 520);
+      }, 1500);
+    }
+
+    function resetGame() {
+      clearInterval(enemyInterval);
+      level = 1;
+      levelEl.textContent = level;
+      initGame();
+    }
+
+    // ── Keyboard input ────────────────────────────────────────────────────────
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowUp')    { e.preventDefault(); tryMove( 0, -1); }
+      if (e.key === 'ArrowDown')  { e.preventDefault(); tryMove( 0,  1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); tryMove(-1,  0); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); tryMove( 1,  0); }
     });
 
-    drawMaze();
+    // ── Start ─────────────────────────────────────────────────────────────────
+    level = 1;
+    initGame();
   </script>
 
 </body>
