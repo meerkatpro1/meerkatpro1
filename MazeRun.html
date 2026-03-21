@@ -185,6 +185,8 @@
     const statusEl = document.getElementById('statusMsg');
 
     let maze, explored, player, enemy, exitR, exitC, level, gameActive, enemyInterval;
+    let lastMoveTime = 0;
+    const MOVE_COOLDOWN = 130; // ms between player moves
 
     // ── Maze generation: DFS + extra wall removal for open rooms ─────────────
     function generateMaze() {
@@ -401,6 +403,9 @@
     // ── Player movement ───────────────────────────────────────────────────────
     function tryMove(dc, dr) {
       if (!gameActive) return;
+      const now = performance.now();
+      if (now - lastMoveTime < MOVE_COOLDOWN) return;
+      lastMoveTime = now;
 
       // Update facing direction
       if (dc ===  1) player.dir = 'right';
