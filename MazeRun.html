@@ -241,13 +241,23 @@
       return walls;
     }
 
-    // ── Random exit placement (min Manhattan distance 4 from start) ───────────
+    // ── Random exit placement (Euclidean radius > 2 from player spawn) ────────
     function pickExit() {
       let r, c;
       do {
         r = Math.floor(Math.random() * ROWS);
         c = Math.floor(Math.random() * COLS);
-      } while (r + c < 4);  // Manhattan distance from (0,0)
+      } while (r * r + c * c <= 4);  // exclude within radius 2 of (0,0)
+      return {r, c};
+    }
+
+    // ── Random enemy placement (Euclidean radius > 3 from player spawn) ───────
+    function pickEnemy() {
+      let r, c;
+      do {
+        r = Math.floor(Math.random() * ROWS);
+        c = Math.floor(Math.random() * COLS);
+      } while (r * r + c * c <= 9 || (r === exitR && c === exitC));  // exclude within radius 3 of (0,0) and exit cell
       return {r, c};
     }
 
@@ -446,12 +456,13 @@
       explored = Array.from({length: ROWS}, () => Array(COLS).fill(false));
       player   = {r: 0, c: 0, dir: 'right'};
 
-      // Place exit randomly (min distance 4 from start)
+      // Place exit (Euclidean radius > 2 from player spawn)
       const exit = pickExit();
       exitR = exit.r; exitC = exit.c;
 
-      // Place enemy far from player: opposite corner to exit
-      enemy = {r: ROWS - 1 - exitR, c: COLS - 1 - exitC};
+      // Place enemy (Euclidean radius > 3 from player spawn, not on exit)
+      const en = pickEnemy();
+      enemy = {r: en.r, c: en.c};
 
       gameActive = true;
 
