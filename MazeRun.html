@@ -60,7 +60,38 @@
       letter-spacing: 0.05em;
     }
     .hud .level-badge span { color: #fff; font-weight: 700; font-size: 1rem; }
+    .hud .points-badge {
+      background: #1a2e1a;
+      border: 1px solid #2a4a2a;
+      border-radius: 4px;
+      padding: 0.3rem 0.8rem;
+      color: #a0d4a0;
+      letter-spacing: 0.05em;
+    }
+    .hud .points-badge span { color: #6fcf6f; font-weight: 700; font-size: 1rem; }
     #statusMsg { font-size: 0.82rem; min-width: 180px; }
+
+    .level-timer {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      text-align: center;
+      width: 100%;
+    }
+    .level-timer .timer-label {
+      font-size: 0.65rem;
+      color: #445;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    .level-timer .timer-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #aac4e0;
+      font-variant-numeric: tabular-nums;
+    }
 
     canvas {
       border: 2px solid #1a1a2e;
@@ -152,12 +183,17 @@
     <div class="maze-panel">
       <div class="hud">
         <div class="level-badge">Level <span id="levelDisplay">1</span></div>
+        <div class="points-badge">Points <span id="pointsDisplay">0</span></div>
         <div id="statusMsg" style="color:#667;">Find the orange exit</div>
       </div>
       <canvas id="mazeCanvas" width="480" height="480"></canvas>
     </div>
 
     <div class="controls-panel">
+      <div class="level-timer">
+        <div class="timer-label">Level Time</div>
+        <div class="timer-value" id="timerDisplay">0.0s</div>
+      </div>
       <div class="controls-label">Controls</div>
       <div class="dpad">
         <button class="btn-up"    onclick="tryMove(0,-1)">&#8593;</button>
@@ -179,15 +215,25 @@
   <script>
     const ROWS = 10, COLS = 10, CELL = 48, WALL = 4;
 
-    const canvas  = document.getElementById('mazeCanvas');
-    const ctx     = canvas.getContext('2d');
-    const levelEl = document.getElementById('levelDisplay');
-    const statusEl = document.getElementById('statusMsg');
+    const canvas      = document.getElementById('mazeCanvas');
+    const ctx         = canvas.getContext('2d');
+    const levelEl     = document.getElementById('levelDisplay');
+    const statusEl    = document.getElementById('statusMsg');
+    const pointsEl    = document.getElementById('pointsDisplay');
+    const timerEl     = document.getElementById('timerDisplay');
 
     let maze, explored, player, enemy, exitR, exitC, level, gameActive, enemyInterval;
     let lastMoveTime = 0;
     const MOVE_COOLDOWN = 130; // ms between player moves
     let enemyPulsing = false, pulseInterval, pulseOffTimeout;
+    let totalPoints = 0, levelStartTime = 0, timerInterval;
+
+    function calcPoints(elapsedMs) {
+      const t = elapsedMs / 1000;
+      if (t <= 3)  return 100;
+      if (t >= 20) return 0;
+      return Math.round(100 * (20 - t) / 17);
+    }
 
     // ── Maze generation: DFS + extra wall removal for open rooms ─────────────
     function generateMaze() {
@@ -410,15 +456,22 @@
       statusEl.textContent = 'Caught! Resetting to level 1…';
       statusEl.style.color = '#e94560';
       draw();
-      setTimeout(() => { level = 1; levelEl.textContent = level; initGame(); }, 1400);
+      setTimeout(() => {
+        level = 1; levelEl.textContent = level;
+        totalPoints = 0; pointsEl.textContent = 0;
+        initGame();
+      }, 1400);
     }
 
     function win() {
       gameActive = false;
       clearAllTimers();
+      const earned = calcPoints(performance.now() - levelStartTime);
+      totalPoints += earned;
+      pointsEl.textContent = totalPoints;
       level++;
       levelEl.textContent = level;
-      statusEl.textContent = `Level ${level} — new maze!`;
+      statusEl.textContent = `+${earned} pts — new maze!`;
       statusEl.style.color = '#4caf50';
       draw();
       setTimeout(initGame, 900);
@@ -467,6 +520,7 @@
     function clearAllTimers() {
       clearInterval(enemyInterval);
       clearInterval(pulseInterval);
+      clearInterval(timerInterval);
       clearTimeout(pulseOffTimeout);
       enemyPulsing = false;
     }
@@ -495,6 +549,14 @@
       markExplored(0, 0);
       draw();
 
+      // Level timer
+      levelStartTime = performance.now();
+      timerEl.textContent = '0.0s';
+      timerInterval = setInterval(() => {
+        const s = (performance.now() - levelStartTime) / 1000;
+        timerEl.textContent = s.toFixed(1) + 's';
+      }, 100);
+
       // Grace period before enemy starts — shrinks slightly each level
       const grace = Math.max(800, 1800 - (level - 1) * 100);
       setTimeout(() => {
@@ -520,8 +582,8 @@
 
     function resetGame() {
       clearAllTimers();
-      level = 1;
-      levelEl.textContent = level;
+      level = 1; levelEl.textContent = level;
+      totalPoints = 0; pointsEl.textContent = 0;
       initGame();
     }
 
