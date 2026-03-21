@@ -239,6 +239,41 @@
     }
     .play-again-btn:hover  { background: #c73652; }
     .play-again-btn:active { transform: scale(0.96); }
+
+    .highscore-box {
+      background: #0d0d1a;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      padding: 0.9rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+    }
+    .highscore-box .hs-emoji {
+      font-size: 2rem;
+      line-height: 1;
+    }
+    .highscore-box .hs-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      text-align: left;
+    }
+    .highscore-box .hs-label {
+      font-size: 0.65rem;
+      color: #445;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .highscore-box .hs-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #aac4e0;
+    }
+    .highscore-box .hs-value.new-record {
+      color: #ffd700;
+    }
   </style>
 </head>
 <body>
@@ -299,6 +334,13 @@
         <div class="stat">
           <div class="stat-label">Levels Cleared</div>
           <div class="stat-value" id="finalLevels">0</div>
+        </div>
+      </div>
+      <div class="highscore-box">
+        <div class="hs-emoji" id="hsEmoji">🏆</div>
+        <div class="hs-text">
+          <div class="hs-label">High Score</div>
+          <div class="hs-value" id="hsValue">0</div>
         </div>
       </div>
       <button class="play-again-btn" onclick="playAgain()">Play Again</button>
@@ -547,9 +589,33 @@
       gameActive = false;
       clearAllTimers();
       draw();
-      // Show death screen with final stats
+
+      // High score (persisted in localStorage)
+      const prevBest = parseInt(localStorage.getItem('mazeRunHighScore') || '0', 10);
+      const isNewRecord = totalPoints > prevBest;
+      const highScore = isNewRecord ? totalPoints : prevBest;
+      if (isNewRecord) localStorage.setItem('mazeRunHighScore', highScore);
+
+      // Pick emoji based on proximity to high score
+      let emoji;
+      if (isNewRecord && totalPoints > 0) {
+        emoji = '🏆';
+      } else if (prevBest === 0 || totalPoints === 0) {
+        emoji = '💀';
+      } else {
+        const ratio = totalPoints / prevBest; // 1.0 = matched, 0 = nothing
+        if      (ratio >= 0.95) emoji = '😮';
+        else if (ratio >= 0.75) emoji = '😅';
+        else if (ratio >= 0.50) emoji = '😔';
+        else                    emoji = '😢';
+      }
+
       document.getElementById('finalScore').textContent  = totalPoints;
       document.getElementById('finalLevels').textContent = level - 1;
+      document.getElementById('hsEmoji').textContent     = emoji;
+      const hsValueEl = document.getElementById('hsValue');
+      hsValueEl.textContent = highScore;
+      hsValueEl.className   = 'hs-value' + (isNewRecord ? ' new-record' : '');
       document.getElementById('deathOverlay').classList.add('visible');
     }
 
