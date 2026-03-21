@@ -154,7 +154,7 @@
         <div class="level-badge">Level <span id="levelDisplay">1</span></div>
         <div id="statusMsg" style="color:#667;">Find the orange exit</div>
       </div>
-      <canvas id="mazeCanvas" width="540" height="540"></canvas>
+      <canvas id="mazeCanvas" width="480" height="480"></canvas>
     </div>
 
     <div class="controls-panel">
@@ -177,16 +177,16 @@
   </div>
 
   <script>
-    const ROWS = 18, COLS = 18, CELL = 30, WALL = 3;
+    const ROWS = 10, COLS = 10, CELL = 48, WALL = 4;
 
     const canvas  = document.getElementById('mazeCanvas');
     const ctx     = canvas.getContext('2d');
     const levelEl = document.getElementById('levelDisplay');
     const statusEl = document.getElementById('statusMsg');
 
-    let maze, explored, player, enemy, level, gameActive, enemyInterval;
+    let maze, explored, player, enemy, exitR, exitC, level, gameActive, enemyInterval;
 
-    // ── Maze generation: iterative DFS (recursive backtracker) ───────────────
+    // ── Maze generation: DFS + extra wall removal for open rooms ─────────────
     function generateMaze() {
       const walls = Array.from({length: ROWS}, () =>
         Array.from({length: COLS}, () =>
@@ -197,6 +197,7 @@
       const stack = [[0, 0]];
       visited[0][0] = true;
 
+      // Iterative DFS — guarantees full connectivity
       while (stack.length > 0) {
         const [r, c] = stack[stack.length - 1];
         const nbrs = [
@@ -220,7 +221,37 @@
           stack.push([nr, nc]);
         }
       }
+
+      // Remove ~45% of remaining interior walls to create large rooms + multiple paths
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          if (c + 1 < COLS && walls[r][c].right && Math.random() < 0.45) {
+            walls[r][c].right   = false;
+            walls[r][c+1].left  = false;
+          }
+          if (r + 1 < ROWS && walls[r][c].bottom && Math.random() < 0.45) {
+            walls[r][c].bottom    = false;
+            walls[r+1][c].top     = false;
+          }
+        }
+      }
+
       return walls;
+    }
+
+    // ── Random exit placement (min Manhattan distance 4 from start) ───────────
+    function pickExit() {
+      let r, c;
+      do {
+        r = Math.floor(Math.random() * ROWS);
+        c = Math.floor(Math.random() * COLS);
+      } while (r + c < 4);  // Manhattan distance from (0,0)
+      return {r, c};
+    }
+
+    // ── Enemy speed (ms per move): slow at level 1, ramps up each level ───────
+    function enemySpeed() {
+      return Math.max(150, 1800 - (level - 1) * 120);
     }
 
     // ── BFS pathfinding for enemy ─────────────────────────────────────────────
@@ -337,7 +368,7 @@
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
           if (!explored[r][c]) continue;
-          const isExit = (r === ROWS - 1 && c === COLS - 1);
+          const isExit = (r === exitR && c === exitC);
           drawFloorCell(r, c, isExit ? COLOR_EXIT : COLOR_FLOOR);
         }
       }
@@ -389,7 +420,7 @@
       markExplored(player.r, player.c);
 
       if (player.r === enemy.r && player.c === enemy.c) { caught(); return; }
-      if (player.r === ROWS - 1 && player.c === COLS - 1) { win(); return; }
+      if (player.r === exitR && player.c === exitC) { win(); return; }
 
       draw();
     }
@@ -409,19 +440,29 @@
       maze     = generateMaze();
       explored = Array.from({length: ROWS}, () => Array(COLS).fill(false));
       player   = {r: 0, c: 0, dir: 'right'};
-      enemy    = {r: ROWS - 1, c: 0};       // opposite corner from exit
+
+      // Place exit randomly (min distance 4 from start)
+      const exit = pickExit();
+      exitR = exit.r; exitC = exit.c;
+
+      // Place enemy far from player: opposite corner to exit
+      enemy = {r: ROWS - 1 - exitR, c: COLS - 1 - exitC};
+
       gameActive = true;
 
-      statusEl.textContent = 'Find the orange exit';
+      const speed = enemySpeed();
+      const speedLabel = speed > 1200 ? 'slow' : speed > 600 ? 'medium' : speed > 300 ? 'fast' : 'very fast';
+      statusEl.textContent = `Find the orange exit  ·  Enemy: ${speedLabel}`;
       statusEl.style.color = '#667';
 
       markExplored(0, 0);
       draw();
 
-      // Enemy starts moving after a short grace period
+      // Grace period before enemy starts — shrinks slightly each level
+      const grace = Math.max(800, 1800 - (level - 1) * 100);
       setTimeout(() => {
-        if (gameActive) enemyInterval = setInterval(enemyTick, 520);
-      }, 1500);
+        if (gameActive) enemyInterval = setInterval(enemyTick, speed);
+      }, grace);
     }
 
     function resetGame() {
