@@ -164,6 +164,81 @@
     .legend-item { display: flex; align-items: center; gap: 0.55rem; }
     .dot { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
     .sq  { width: 13px; height: 13px; border-radius: 2px; flex-shrink: 0; }
+
+    /* ── Death screen overlay ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .overlay.visible { display: flex; }
+
+    .death-card {
+      background: #12121f;
+      border: 2px solid #e94560;
+      border-radius: 12px;
+      padding: 2.5rem 3rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+      box-shadow: 0 0 40px rgba(233, 69, 96, 0.3);
+      animation: pop-in 0.2s ease-out;
+    }
+    @keyframes pop-in {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .death-card h2 {
+      font-size: 1.8rem;
+      color: #e94560;
+      letter-spacing: 0.02em;
+    }
+
+    .death-card .stat-row {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .death-card .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .death-card .stat-label {
+      font-size: 0.72rem;
+      color: #556;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .death-card .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .play-again-btn {
+      margin-top: 0.5rem;
+      background: #e94560;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0.75rem 2.2rem;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .play-again-btn:hover  { background: #c73652; }
+    .play-again-btn:active { transform: scale(0.96); }
   </style>
 </head>
 <body>
@@ -210,6 +285,24 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Death screen -->
+  <div class="overlay" id="deathOverlay">
+    <div class="death-card">
+      <h2>Caught!</h2>
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-label">Final Score</div>
+          <div class="stat-value" id="finalScore">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Levels Cleared</div>
+          <div class="stat-value" id="finalLevels">0</div>
+        </div>
+      </div>
+      <button class="play-again-btn" onclick="playAgain()">Play Again</button>
+    </div>
   </div>
 
   <script>
@@ -453,14 +546,18 @@
     function caught() {
       gameActive = false;
       clearAllTimers();
-      statusEl.textContent = 'Caught! Resetting to level 1…';
-      statusEl.style.color = '#e94560';
       draw();
-      setTimeout(() => {
-        level = 1; levelEl.textContent = level;
-        totalPoints = 0; pointsEl.textContent = 0;
-        initGame();
-      }, 1400);
+      // Show death screen with final stats
+      document.getElementById('finalScore').textContent  = totalPoints;
+      document.getElementById('finalLevels').textContent = level - 1;
+      document.getElementById('deathOverlay').classList.add('visible');
+    }
+
+    function playAgain() {
+      document.getElementById('deathOverlay').classList.remove('visible');
+      level = 1; levelEl.textContent = level;
+      totalPoints = 0; pointsEl.textContent = 0;
+      initGame();
     }
 
     function win() {
