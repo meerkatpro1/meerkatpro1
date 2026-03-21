@@ -187,6 +187,7 @@
     let maze, explored, player, enemy, exitR, exitC, level, gameActive, enemyInterval;
     let lastMoveTime = 0;
     const MOVE_COOLDOWN = 130; // ms between player moves
+    let enemyPulsing = false, pulseInterval, pulseOffTimeout;
 
     // ── Maze generation: DFS + extra wall removal for open rooms ─────────────
     function generateMaze() {
@@ -385,6 +386,19 @@
         }
       }
 
+      // Enemy pulse — draws even through fog of war
+      if (enemyPulsing) {
+        const x = enemy.c * CELL, y = enemy.r * CELL;
+        const w = maze[enemy.r][enemy.c];
+        ctx.fillStyle = 'rgba(220, 40, 40, 0.9)';
+        ctx.fillRect(
+          x + (w.left   ? WALL : 0),
+          y + (w.top    ? WALL : 0),
+          CELL - (w.left ? WALL : 0) - (w.right  ? WALL : 0),
+          CELL - (w.top  ? WALL : 0) - (w.bottom ? WALL : 0)
+        );
+      }
+
       drawEnemy();
       drawPlayer();
     }
@@ -392,7 +406,7 @@
     // ── Game events ───────────────────────────────────────────────────────────
     function caught() {
       gameActive = false;
-      clearInterval(enemyInterval);
+      clearAllTimers();
       statusEl.textContent = 'Caught! Resetting to level 1…';
       statusEl.style.color = '#e94560';
       draw();
@@ -401,7 +415,7 @@
 
     function win() {
       gameActive = false;
-      clearInterval(enemyInterval);
+      clearAllTimers();
       level++;
       levelEl.textContent = level;
       statusEl.textContent = `Level ${level} — new maze!`;
@@ -450,8 +464,15 @@
     }
 
     // ── Init / reset ──────────────────────────────────────────────────────────
-    function initGame() {
+    function clearAllTimers() {
       clearInterval(enemyInterval);
+      clearInterval(pulseInterval);
+      clearTimeout(pulseOffTimeout);
+      enemyPulsing = false;
+    }
+
+    function initGame() {
+      clearAllTimers();
       maze     = generateMaze();
       explored = Array.from({length: ROWS}, () => Array(COLS).fill(false));
       player   = {r: 0, c: 0, dir: 'right'};
@@ -479,10 +500,26 @@
       setTimeout(() => {
         if (gameActive) enemyInterval = setInterval(enemyTick, speed);
       }, grace);
+
+      // Enemy position pulse: first at 3s, then every 5s, lasts 1s each
+      function triggerPulse() {
+        if (!gameActive) return;
+        enemyPulsing = true;
+        draw();
+        pulseOffTimeout = setTimeout(() => {
+          enemyPulsing = false;
+          draw();
+        }, 1000);
+      }
+      setTimeout(() => {
+        if (!gameActive) return;
+        triggerPulse();
+        pulseInterval = setInterval(triggerPulse, 5000);
+      }, 3000);
     }
 
     function resetGame() {
-      clearInterval(enemyInterval);
+      clearAllTimers();
       level = 1;
       levelEl.textContent = level;
       initGame();
