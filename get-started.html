@@ -5,16 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Get Started — meerkatpro1</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f5f5f5;
-      color: #333;
+      background: #0d0d1a;
+      color: #ccc;
     }
 
     nav {
@@ -47,12 +43,134 @@
       transition: color 0.2s;
     }
 
-    nav ul a:hover {
-      color: #fff;
+    nav ul a:hover { color: #fff; }
+
+    .game-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      min-height: calc(100vh - 60px);
+      padding: 2rem;
     }
 
-    .content {
-      min-height: calc(100vh - 60px);
+    .maze-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .maze-label {
+      font-size: 0.85rem;
+      color: #556;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    canvas {
+      border: 2px solid #2a2a4a;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .status {
+      font-size: 0.9rem;
+      color: #aac4e0;
+      min-height: 1.4em;
+      text-align: center;
+    }
+
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .controls-label {
+      font-size: 0.85rem;
+      color: #556;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 52px);
+      grid-template-rows: repeat(3, 52px);
+      gap: 4px;
+    }
+
+    .dpad button {
+      background: #1a1a2e;
+      border: 2px solid #2a2a4a;
+      border-radius: 6px;
+      color: #aac4e0;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: background 0.1s, border-color 0.1s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .dpad button:hover {
+      background: #22224a;
+      border-color: #4a4a8a;
+    }
+
+    .dpad button:active {
+      background: #2d2d6a;
+      transform: scale(0.93);
+    }
+
+    .dpad .up    { grid-column: 2; grid-row: 1; }
+    .dpad .left  { grid-column: 1; grid-row: 2; }
+    .dpad .down  { grid-column: 2; grid-row: 2; }
+    .dpad .right { grid-column: 3; grid-row: 2; }
+
+    .reset-btn {
+      background: #2a1a1a;
+      border: 2px solid #4a2a2a;
+      border-radius: 6px;
+      color: #e94560;
+      font-size: 0.85rem;
+      padding: 0.5rem 1.2rem;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: background 0.15s;
+    }
+
+    .reset-btn:hover { background: #3a2020; }
+
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: #667;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-square {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -68,7 +186,165 @@
     </ul>
   </nav>
 
-  <div class="content"></div>
+  <div class="game-wrapper">
+
+    <div class="maze-panel">
+      <div class="maze-label">Maze</div>
+      <canvas id="mazeCanvas" width="540" height="468"></canvas>
+      <div class="status" id="status">Find the exit — use the arrows or keyboard</div>
+    </div>
+
+    <div class="controls-panel">
+      <div class="controls-label">Controls</div>
+
+      <div class="dpad">
+        <button class="up"    onclick="move(0,-1)">&#8593;</button>
+        <button class="left"  onclick="move(-1,0)">&#8592;</button>
+        <button class="down"  onclick="move(0,1)">&#8595;</button>
+        <button class="right" onclick="move(1,0)">&#8594;</button>
+      </div>
+
+      <button class="reset-btn" onclick="reset()">Reset</button>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#e94560;"></div>
+          <span>Player</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#4caf50;"></div>
+          <span>Exit</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-square" style="background:#1a1a2e; border:1px solid #2a2a4a;"></div>
+          <span>Wall</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-square" style="background:#1e1e3a; border:1px solid #2a2a5a;"></div>
+          <span>Path</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const MAZE = [
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,0,1,0,0,0,0,0,1,0,0,0,1],
+      [1,0,1,0,1,0,1,1,0,1,1,0,1,0,1],
+      [1,0,1,0,0,0,0,1,0,0,0,0,1,0,1],
+      [1,0,1,1,1,1,0,1,0,1,1,1,1,0,1],
+      [1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
+      [1,1,1,0,1,1,1,1,0,1,0,1,1,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,1,0,1,1,1,0,1,1,1,0,1,1],
+      [1,0,1,0,0,0,0,1,0,0,0,1,0,0,1],
+      [1,0,1,0,1,1,0,1,1,1,0,1,1,0,1],
+      [1,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    ];
+
+    const ROWS = MAZE.length;
+    const COLS = MAZE[0].length;
+    const CELL = 36;
+
+    const START = { x: 1, y: 1 };
+    const GOAL  = { x: 13, y: 11 };
+
+    const canvas = document.getElementById('mazeCanvas');
+    const ctx = canvas.getContext('2d');
+    const status = document.getElementById('status');
+
+    let player = { ...START };
+    let won = false;
+
+    function drawMaze() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+          const x = col * CELL;
+          const y = row * CELL;
+
+          if (MAZE[row][col] === 1) {
+            // Wall
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(x, y, CELL, CELL);
+            // subtle inner shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            ctx.fillRect(x+1, y+1, CELL-2, CELL-2);
+          } else {
+            // Path
+            ctx.fillStyle = '#1e1e3a';
+            ctx.fillRect(x, y, CELL, CELL);
+            // subtle grid line
+            ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+            ctx.strokeRect(x, y, CELL, CELL);
+          }
+        }
+      }
+
+      // Draw goal
+      const gx = GOAL.x * CELL + CELL / 2;
+      const gy = GOAL.y * CELL + CELL / 2;
+      ctx.fillStyle = '#4caf50';
+      ctx.beginPath();
+      ctx.arc(gx, gy, CELL * 0.35, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.font = `bold ${CELL * 0.4}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('E', gx, gy);
+
+      // Draw player
+      const px = player.x * CELL + CELL / 2;
+      const py = player.y * CELL + CELL / 2;
+      ctx.fillStyle = '#e94560';
+      ctx.beginPath();
+      ctx.arc(px, py, CELL * 0.35, 0, Math.PI * 2);
+      ctx.fill();
+      // player highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.beginPath();
+      ctx.arc(px - CELL * 0.1, py - CELL * 0.1, CELL * 0.15, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function move(dx, dy) {
+      if (won) return;
+      const nx = player.x + dx;
+      const ny = player.y + dy;
+      if (ny < 0 || ny >= ROWS || nx < 0 || nx >= COLS) return;
+      if (MAZE[ny][nx] === 1) return;
+      player.x = nx;
+      player.y = ny;
+      drawMaze();
+      if (player.x === GOAL.x && player.y === GOAL.y) {
+        won = true;
+        status.textContent = 'You reached the exit!';
+        status.style.color = '#4caf50';
+      }
+    }
+
+    function reset() {
+      player = { ...START };
+      won = false;
+      status.textContent = 'Find the exit — use the arrows or keyboard';
+      status.style.color = '#aac4e0';
+      drawMaze();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp')    { e.preventDefault(); move(0, -1); }
+      if (e.key === 'ArrowDown')  { e.preventDefault(); move(0,  1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); move(-1, 0); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); move(1,  0); }
+    });
+
+    drawMaze();
+  </script>
 
 </body>
 </html>
