@@ -23,51 +23,149 @@
       height: 60px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
-
-    nav .logo {
-      color: #943030;
-      font-size: 1.2rem;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-    }
-
-    nav ul a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: color 0.2s;
-    }
-
+    nav .logo { color: #943030; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a { color: #ccc; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
     nav ul a:hover { color: #fff; }
 
-    .settings-wrapper {
-      max-width: 600px;
-      margin: 3rem auto;
+    .page {
+      max-width: 860px;
+      margin: 2.5rem auto;
       padding: 0 2rem;
     }
 
-    .settings-wrapper h1 {
+    h1 {
       font-size: 1.6rem;
       color: #fff;
       margin-bottom: 2rem;
-      letter-spacing: -0.3px;
     }
 
-    .settings-section {
+    /* ── Account dashboard (logged in) ─────────────────────────────────────── */
+    .dashboard {
+      display: none;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .dashboard.visible { display: flex; }
+
+    .account-card {
       background: #1a1a2e;
       border: 1px solid #2a2a4a;
-      border-radius: 8px;
-      padding: 1.5rem;
-      color: #667;
+      border-radius: 10px;
+      padding: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .account-info { display: flex; flex-direction: column; gap: 0.4rem; }
+    .account-info .username {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .account-info .meta {
+      font-size: 0.78rem;
+      color: #445;
+    }
+
+    .account-stats {
+      display: flex;
+      gap: 2rem;
+    }
+    .stat { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+    .stat-label { font-size: 0.65rem; color: #445; letter-spacing: 0.1em; text-transform: uppercase; }
+    .stat-value { font-size: 1.4rem; font-weight: 700; color: #aac4e0; }
+
+    .logout-btn {
+      background: #2a1a1a;
+      border: 2px solid #4a2a2a;
+      border-radius: 6px;
+      color: #e94560;
+      font-size: 0.85rem;
+      padding: 0.55rem 1.3rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .logout-btn:hover { background: #3a2020; }
+
+    /* ── Auth forms (logged out) ─────────────────────────────────────────────── */
+    .auth-panels {
+      display: none;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .auth-panels.visible { display: flex; }
+
+    .auth-panel {
+      flex: 1;
+      min-width: 260px;
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 10px;
+      padding: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .auth-panel h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .field label { font-size: 0.72rem; color: #556; letter-spacing: 0.08em; text-transform: uppercase; }
+    .field input {
+      background: #0d0d1a;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      color: #fff;
       font-size: 0.9rem;
+      padding: 0.55rem 0.8rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field input:focus { border-color: #3b82f6; }
+
+    .auth-btn {
+      background: #1a4fa8;
+      border: 1px solid #2563eb;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.6rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 0.2rem;
+    }
+    .auth-btn:hover { background: #2563eb; }
+    .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .form-msg {
+      font-size: 0.78rem;
+      min-height: 1.1em;
       text-align: center;
     }
+    .form-msg.error   { color: #e94560; }
+    .form-msg.success { color: #4caf50; }
+
+    .spinner {
+      display: none;
+      width: 16px; height: 16px;
+      border: 2px solid #444;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+    .spinner.visible { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -79,10 +177,152 @@
     </ul>
   </nav>
 
-  <div class="settings-wrapper">
+  <div class="page">
     <h1>Settings</h1>
-    <div class="settings-section">Nothing here yet.</div>
+
+    <!-- Logged-in dashboard -->
+    <div class="dashboard" id="dashboard">
+      <div class="account-card">
+        <div class="account-info">
+          <div class="username" id="dashUsername"></div>
+          <div class="meta" id="dashMeta"></div>
+        </div>
+        <div class="account-stats">
+          <div class="stat">
+            <div class="stat-label">High Score</div>
+            <div class="stat-value" id="dashHighScore">0</div>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()">Log out</button>
+      </div>
+    </div>
+
+    <!-- Logged-out auth panels -->
+    <div class="auth-panels" id="authPanels">
+
+      <!-- Create account -->
+      <div class="auth-panel">
+        <h2>Create Account</h2>
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="regUsername" autocomplete="username" maxlength="30" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="regPassword" autocomplete="new-password" />
+        </div>
+        <div class="field">
+          <label>Confirm Password</label>
+          <input type="password" id="regConfirm" autocomplete="new-password" />
+        </div>
+        <button class="auth-btn" id="regBtn" onclick="doRegister()">Create Account</button>
+        <div class="spinner" id="regSpinner"></div>
+        <div class="form-msg" id="regMsg"></div>
+      </div>
+
+      <!-- Log in -->
+      <div class="auth-panel">
+        <h2>Log In</h2>
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="loginUsername" autocomplete="username" maxlength="30" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="loginPassword" autocomplete="current-password" />
+        </div>
+        <button class="auth-btn" id="loginBtn" onclick="doLogin()">Log In</button>
+        <div class="spinner" id="loginSpinner"></div>
+        <div class="form-msg" id="loginMsg"></div>
+      </div>
+
+    </div>
   </div>
+
+  <script src="auth.js"></script>
+  <script>
+    async function refreshUI() {
+      const session = Auth.getSession();
+      document.getElementById('dashboard').classList.toggle('visible', !!session);
+      document.getElementById('authPanels').classList.toggle('visible', !session);
+
+      if (session) {
+        document.getElementById('dashUsername').textContent = session.username;
+        const data = await Auth.getUserData();
+        document.getElementById('dashHighScore').textContent = data?.highScore ?? 0;
+        const created = data?.createdAt
+          ? new Date(data.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' })
+          : '';
+        document.getElementById('dashMeta').textContent = created ? `Member since ${created}` : '';
+      }
+    }
+
+    function setLoading(formId, loading) {
+      document.getElementById(formId + 'Btn').disabled     = loading;
+      document.getElementById(formId + 'Spinner').classList.toggle('visible', loading);
+    }
+
+    function setMsg(formId, text, type) {
+      const el = document.getElementById(formId + 'Msg');
+      el.textContent = text;
+      el.className   = 'form-msg ' + type;
+    }
+
+    async function doRegister() {
+      const username = document.getElementById('regUsername').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const confirm  = document.getElementById('regConfirm').value;
+
+      if (!username)             return setMsg('reg', 'Username is required.', 'error');
+      if (password.length < 6)  return setMsg('reg', 'Password must be at least 6 characters.', 'error');
+      if (password !== confirm)  return setMsg('reg', 'Passwords do not match.', 'error');
+
+      setLoading('reg', true);
+      setMsg('reg', '', '');
+      try {
+        await Auth.createAccount(username, password);
+        setMsg('reg', 'Account created!', 'success');
+        await refreshUI();
+      } catch (e) {
+        setMsg('reg', e.message, 'error');
+      } finally {
+        setLoading('reg', false);
+      }
+    }
+
+    async function doLogin() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!username || !password) return setMsg('login', 'Please fill in all fields.', 'error');
+
+      setLoading('login', true);
+      setMsg('login', '', '');
+      try {
+        await Auth.login(username, password);
+        setMsg('login', 'Logged in!', 'success');
+        await refreshUI();
+      } catch (e) {
+        setMsg('login', e.message, 'error');
+      } finally {
+        setLoading('login', false);
+      }
+    }
+
+    function doLogout() {
+      Auth.logout();
+      refreshUI();
+    }
+
+    // Allow Enter key to submit forms
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      if (document.activeElement?.closest('#authPanels > :first-child')) doRegister();
+      else if (document.activeElement?.closest('#authPanels > :last-child')) doLogin();
+    });
+
+    refreshUI();
+  </script>
 
 </body>
 </html>

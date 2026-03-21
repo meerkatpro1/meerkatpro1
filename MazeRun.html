@@ -344,6 +344,7 @@
     </div>
   </div>
 
+  <script src="auth.js"></script>
   <script>
     const ROWS = 10, COLS = 10, CELL = 48, WALL = 4;
 
@@ -581,39 +582,57 @@
       drawPlayer();
     }
 
+    // ── High score: account-aware ─────────────────────────────────────────────
+    async function resolveHighScore(score) {
+      const session = Auth.getSession();
+      let prevBest, highScore, isNewRecord;
+
+      if (session) {
+        // Load from encrypted account
+        const data = await Auth.getUserData() || {};
+        prevBest    = data.highScore || 0;
+        isNewRecord = score > prevBest;
+        highScore   = isNewRecord ? score : prevBest;
+        if (isNewRecord) await Auth.saveUserData({ ...data, highScore });
+      } else {
+        // Fall back to anonymous localStorage
+        prevBest    = parseInt(localStorage.getItem('mazeRunHighScore') || '0', 10);
+        isNewRecord = score > prevBest;
+        highScore   = isNewRecord ? score : prevBest;
+        if (isNewRecord) localStorage.setItem('mazeRunHighScore', highScore);
+      }
+
+      return { prevBest, highScore, isNewRecord };
+    }
+
     // ── Game events ───────────────────────────────────────────────────────────
     function caught() {
       gameActive = false;
       clearAllTimers();
       draw();
 
-      // High score (persisted in localStorage)
-      const prevBest = parseInt(localStorage.getItem('mazeRunHighScore') || '0', 10);
-      const isNewRecord = totalPoints > prevBest;
-      const highScore = isNewRecord ? totalPoints : prevBest;
-      if (isNewRecord) localStorage.setItem('mazeRunHighScore', highScore);
+      resolveHighScore(totalPoints).then(({ prevBest, highScore, isNewRecord }) => {
+        let emoji;
+        if (isNewRecord && totalPoints > 0) {
+          emoji = '🏆';
+        } else if (prevBest === 0 || totalPoints === 0) {
+          emoji = '💀';
+        } else {
+          const ratio = totalPoints / prevBest;
+          if      (ratio >= 0.95) emoji = '😮';
+          else if (ratio >= 0.75) emoji = '😅';
+          else if (ratio >= 0.50) emoji = '😔';
+          else                    emoji = '😢';
+        }
 
-      // Pick emoji based on proximity to high score
-      let emoji;
-      if (isNewRecord && totalPoints > 0) {
-        emoji = '🏆';
-      } else if (prevBest === 0 || totalPoints === 0) {
-        emoji = '💀';
-      } else {
-        const ratio = totalPoints / prevBest; // 1.0 = matched, 0 = nothing
-        if      (ratio >= 0.95) emoji = '😮';
-        else if (ratio >= 0.75) emoji = '😅';
-        else if (ratio >= 0.50) emoji = '😔';
-        else                    emoji = '😢';
-      }
-
-      document.getElementById('finalScore').textContent  = totalPoints;
-      document.getElementById('finalLevels').textContent = level - 1;
-      document.getElementById('hsEmoji').textContent     = emoji;
-      const hsValueEl = document.getElementById('hsValue');
-      hsValueEl.textContent = highScore;
-      hsValueEl.className   = 'hs-value' + (isNewRecord ? ' new-record' : '');
-      document.getElementById('deathOverlay').classList.add('visible');
+        document.getElementById('finalScore').textContent  = totalPoints;
+        document.getElementById('finalLevels').textContent = level - 1;
+        document.getElementById('hsEmoji').textContent     = emoji;
+        const hsValueEl = document.getElementById('hsValue');
+        hsValueEl.textContent = highScore;
+        hsValueEl.className   = 'hs-value' + (isNewRecord ? ' new-record' : '');
+        document.getElementById('deathOverlay').classList.add('visible');
+      });
     }
 
     function playAgain() {
