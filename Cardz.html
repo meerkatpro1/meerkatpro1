@@ -22,24 +22,397 @@
       justify-content: space-between;
       height: 60px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      position: sticky; top: 0; z-index: 10;
     }
     nav .logo { color: #943030; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
-    nav ul { list-style: none; display: flex; gap: 2rem; }
-    nav ul a { color: #ccc; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+    nav ul    { list-style: none; display: flex; gap: 2rem; }
+    nav ul a  { color: #ccc; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
     nav ul a:hover { color: #fff; }
+
+    .page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.8rem 1rem;
+      gap: 1rem;
+    }
+
+    .game-header { text-align: center; }
+    .game-header h1 { color: #fff; font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+    #statusMsg { font-size: 0.85rem; color: #445; margin-top: 0.35rem; min-height: 1.3em; }
+
+    .board-wrap {
+      width: 100%;
+      max-width: 640px;
+      background: #06060f;
+      border: 2px solid #16163a;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    #board { width: 100%; height: auto; display: block; }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 640px;
+      gap: 1rem;
+    }
+
+    .path-display { display: flex; align-items: center; gap: 3px; flex-wrap: wrap; }
+
+    .path-chip {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 30px; height: 30px; border-radius: 50%;
+      font-size: 0.8rem; font-weight: 800; font-family: 'Courier New', monospace;
+      padding: 0 3px;
+    }
+    .path-chip.A    { background: #0c1e48; color: #5a9fff; border: 1px solid #1a3a8a; }
+    .path-chip.E    { background: #081e20; color: #40dfbf; border: 1px solid #145050; }
+    .path-chip.S    { background: #180828; color: #b060ff; border: 1px solid #4a1880; }
+    .path-chip.X    { background: #220606; color: #ff5050; border: 1px solid #661212; }
+    .path-chip.BOSS { background: #221800; color: #ffd700; border: 1px solid #665000;
+                      border-radius: 7px; min-width: 46px; font-size: 0.72rem; }
+    .path-sep { color: #222240; font-size: 0.85rem; }
+
+    .reset-btn {
+      background: #2a1a1a; border: 2px solid #4a2a2a; border-radius: 6px;
+      color: #e94560; font-size: 0.82rem; padding: 0.45rem 1rem;
+      cursor: pointer; white-space: nowrap; transition: background 0.15s; flex-shrink: 0;
+    }
+    .reset-btn:hover { background: #3a2020; }
   </style>
 </head>
 <body>
 
   <nav>
     <a class="logo" href="index.html">meerkatpro1</a>
-    <ul>
-      <li><a href="settings.html">Settings</a></li>
-    </ul>
+    <ul><li><a href="settings.html">Settings</a></li></ul>
   </nav>
+
+  <div class="page">
+    <div class="game-header">
+      <h1>Cardz</h1>
+      <div id="statusMsg">Select a node on the bottom row to begin</div>
+    </div>
+
+    <div class="board-wrap">
+      <svg id="board" viewBox="0 0 640 820"></svg>
+    </div>
+
+    <div class="controls">
+      <div id="pathDisplay" class="path-display"></div>
+      <button class="reset-btn" onclick="resetGame()">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    // ── Graph ─────────────────────────────────────────────────────────────────
+    // 9 rows (row 0 = Boss top, row 8 = start bottom).
+    // Nodes use a fixed 4-column grid (cols 0-3). Some rows skip columns
+    // intentionally to create visual variance. Cross-arrows bridge the gaps.
+    //
+    // Column x positions: col0=95  col1=245  col2=395  col3=545
+    // Row gaps (missing cols):
+    //   row2: gap col1      row4(X): gap col2     row6: gap col0
+    //   row7: gap col3      row8: gap col1
+    //
+    // Letters: A=12 (most), E=7 (second), S=3 (third), X=3 (one row only)
+    // In-degree rule: every node receives 1-2 arrows
+
+    const NODES = {
+      'boss': { row: 0, col: 2, letter: null },   // centred between col1/col2
+
+      'r1_0': { row: 1, col: 1, letter: 'A' },   // cols 1,2  (gap 0,3)
+      'r1_1': { row: 1, col: 2, letter: 'E' },
+
+      'r2_0': { row: 2, col: 0, letter: 'A' },   // cols 0,2,3  (gap col1)
+      'r2_1': { row: 2, col: 2, letter: 'E' },
+      'r2_2': { row: 2, col: 3, letter: 'A' },
+
+      'r3_0': { row: 3, col: 0, letter: 'A' },   // cols 0,1,2,3  (full)
+      'r3_1': { row: 3, col: 1, letter: 'S' },
+      'r3_2': { row: 3, col: 2, letter: 'A' },
+      'r3_3': { row: 3, col: 3, letter: 'E' },
+
+      'r4_0': { row: 4, col: 0, letter: 'X' },   // cols 0,1,3  (gap col2) ← X row
+      'r4_1': { row: 4, col: 1, letter: 'X' },
+      'r4_2': { row: 4, col: 3, letter: 'X' },
+
+      'r5_0': { row: 5, col: 0, letter: 'A' },   // cols 0,1,2,3  (full)
+      'r5_1': { row: 5, col: 1, letter: 'A' },
+      'r5_2': { row: 5, col: 2, letter: 'E' },
+      'r5_3': { row: 5, col: 3, letter: 'S' },
+
+      'r6_0': { row: 6, col: 1, letter: 'A' },   // cols 1,2,3  (gap col0)
+      'r6_1': { row: 6, col: 2, letter: 'E' },
+      'r6_2': { row: 6, col: 3, letter: 'A' },
+
+      'r7_0': { row: 7, col: 0, letter: 'A' },   // cols 0,1,2  (gap col3)
+      'r7_1': { row: 7, col: 1, letter: 'E' },
+      'r7_2': { row: 7, col: 2, letter: 'A' },
+
+      'r8_0': { row: 8, col: 0, letter: 'A' },   // cols 0,2,3  (gap col1) ← start
+      'r8_1': { row: 8, col: 2, letter: 'S' },
+      'r8_2': { row: 8, col: 3, letter: 'E' },
+    };
+
+    // Out-edges: each node points UPWARD to its targets.
+    // In-degrees shown inline; all are 1 or 2.
+    const OUT = {
+      'boss': [],
+      // boss ← r1_0, r1_1  (in=2) ✓
+      'r1_0': ['boss'],
+      'r1_1': ['boss'],
+      // r1_0 ← r2_0, r2_1  (in=2) ✓   r1_1 ← r2_1, r2_2  (in=2) ✓
+      'r2_0': ['r1_0'],
+      'r2_1': ['r1_0', 'r1_1'],
+      'r2_2': ['r1_1'],
+      // r2_0 ← r3_0, r3_1  (in=2) ✓   r2_1 ← r3_1, r3_2  (in=2) ✓   r2_2 ← r3_2, r3_3  (in=2) ✓
+      'r3_0': ['r2_0'],
+      'r3_1': ['r2_0', 'r2_1'],
+      'r3_2': ['r2_1', 'r2_2'],
+      'r3_3': ['r2_2'],
+      // r3_0 ← r4_0        (in=1) ✓   r3_1 ← r4_0, r4_1  (in=2) ✓
+      // r3_2 ← r4_1, r4_2  (in=2) ✓   r3_3 ← r4_2        (in=1) ✓
+      // r4_2 is col3 → r3_2 col2: deliberate cross-arrow over the gap
+      'r4_0': ['r3_0', 'r3_1'],
+      'r4_1': ['r3_1', 'r3_2'],
+      'r4_2': ['r3_2', 'r3_3'],
+      // r4_0 ← r5_0, r5_1  (in=2) ✓   r4_1 ← r5_1, r5_2  (in=2) ✓
+      // r4_2 ← r5_2, r5_3  (in=2) ✓  — r5_2(col2)→r4_2(col3): cross over gap
+      'r5_0': ['r4_0'],
+      'r5_1': ['r4_0', 'r4_1'],
+      'r5_2': ['r4_1', 'r4_2'],
+      'r5_3': ['r4_2'],
+      // r5_0 ← r6_0        (in=1) ✓   r5_1 ← r6_0, r6_1  (in=2) ✓
+      // r5_2 ← r6_1, r6_2  (in=2) ✓   r5_3 ← r6_2        (in=1) ✓
+      // r6_0 is col1 → r5_0 col0: cross-arrow over gap col0
+      'r6_0': ['r5_0', 'r5_1'],
+      'r6_1': ['r5_1', 'r5_2'],
+      'r6_2': ['r5_2', 'r5_3'],
+      // r6_0 ← r7_0, r7_1  (in=2) ✓   r6_1 ← r7_1, r7_2  (in=2) ✓
+      // r6_2 ← r7_2        (in=1) ✓   — r7_2(col2)→r6_2(col3): cross over gap col3
+      'r7_0': ['r6_0'],
+      'r7_1': ['r6_0', 'r6_1'],
+      'r7_2': ['r6_1', 'r6_2'],
+      // r7_0 ← r8_0        (in=1) ✓   r7_1 ← r8_0, r8_1  (in=2) ✓
+      // r7_2 ← r8_1, r8_2  (in=2) ✓   — r8_0(col0)→r7_1(col1) & r8_1(col2)→r7_1(col1)
+      'r8_0': ['r7_0', 'r7_1'],
+      'r8_1': ['r7_1', 'r7_2'],
+      'r8_2': ['r7_2'],
+    };
+
+    const START_ROW = new Set(['r8_0', 'r8_1', 'r8_2']);
+    const X_ROW_IDX = 4;
+
+    // ── Layout ────────────────────────────────────────────────────────────────
+    // Fixed 4-column x grid; Boss centred manually.
+    const W = 640, H = 820, R = 25, BOSS_R = 32;
+    const COL_X  = [95, 245, 395, 545];   // x for cols 0-3
+    const ROW_Y  = [50, 140, 230, 322, 412, 502, 592, 682, 772];
+
+    function pos(id) {
+      if (id === 'boss') return { x: (COL_X[1] + COL_X[2]) / 2, y: ROW_Y[0] };
+      const { row, col } = NODES[id];
+      return { x: COL_X[col], y: ROW_Y[row] };
+    }
+
+    function octagonPoints(cx, cy, r) {
+      const pts = [];
+      for (let i = 0; i < 8; i++) {
+        const a = (i * Math.PI / 4) - Math.PI / 2;
+        pts.push(`${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`);
+      }
+      return pts.join(' ');
+    }
+
+    // ── Game state ────────────────────────────────────────────────────────────
+    let current   = null;
+    let pathArr   = [];
+    let available = new Set(START_ROW);
+    let won       = false;
+
+    function isPathEdge(a, b) {
+      for (let i = 0; i < pathArr.length - 1; i++)
+        if (pathArr[i] === a && pathArr[i + 1] === b) return true;
+      return false;
+    }
+
+    // ── SVG rendering ─────────────────────────────────────────────────────────
+    function edgeSVG(fromId, toId) {
+      const f  = pos(fromId), t = pos(toId);
+      const dx = t.x - f.x,  dy = t.y - f.y;
+      const d  = Math.sqrt(dx * dx + dy * dy);
+      const nx = dx / d, ny = dy / d;
+      const fr = fromId === 'boss' ? BOSS_R : R;
+      const tr = toId   === 'boss' ? BOSS_R : R;
+
+      const x1 = f.x + nx * (fr + 2);
+      const y1 = f.y + ny * (fr + 2);
+      const x2 = t.x - nx * tr;
+      const y2 = t.y - ny * tr;
+
+      const traveled  = isPathEdge(fromId, toId);
+      const highlight = current === fromId && available.has(toId);
+
+      const stroke = highlight ? '#4caf50' : traveled ? '#3b82f6' : '#141428';
+      const sw     = (highlight || traveled) ? 2 : 1.5;
+      const marker = highlight ? 'ah-green' : traveled ? 'ah-blue' : 'ah-dim';
+
+      return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}"
+                    x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
+                    stroke="${stroke}" stroke-width="${sw}"
+                    marker-end="url(#${marker})"/>`;
+    }
+
+    function nodeSVG(id) {
+      const { x, y } = pos(id);
+      const node    = NODES[id];
+      const isBoss  = id === 'boss';
+      const isX     = node.letter === 'X';
+      const inPath  = pathArr.includes(id);
+      const isAvail = available.has(id);
+      const isCurr  = current === id;
+      const r       = isBoss ? BOSS_R : R;
+
+      let fill, stroke, sw, textFill, filt = '';
+
+      if (isBoss) {
+        if      (isCurr)   { fill='#2a1c00'; stroke='#ffd700'; sw=3;   textFill='#ffd700'; filt='filter="url(#f-gold)"'; }
+        else if (isAvail)  { fill='#161000'; stroke='#9a7000'; sw=2.5; textFill='#b89000'; filt='filter="url(#f-gold)"'; }
+        else               { fill='#0c0900'; stroke='#261a00'; sw=2;   textFill='#322200'; }
+      } else if (isCurr) {
+        fill='#0c1e4a'; stroke='#3b82f6'; sw=3; textFill='#fff'; filt='filter="url(#f-blue)"';
+      } else if (isAvail) {
+        fill = isX ? '#1c0606' : '#071610';
+        stroke='#4caf50'; sw=2.5; textFill='#4caf50'; filt='filter="url(#f-green)"';
+      } else if (inPath) {
+        fill = isX ? '#160404' : '#080c1e'; stroke='#18305a'; sw=2; textFill='#244878';
+      } else {
+        fill   = isX ? '#100202' : '#090916';
+        stroke = isX ? '#220a0a' : '#14142e'; sw=1.5;
+        textFill = isX ? '#2e0e0e' : '#1e1e3e';
+      }
+
+      const label = isBoss ? '★' : node.letter;
+      const fs    = isBoss ? 22 : 14;
+      const shape = isBoss
+        ? `<polygon points="${octagonPoints(x, y, r)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" ${filt}/>`
+        : `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" ${filt}/>`;
+
+      const cursor = isAvail ? 'pointer' : 'default';
+      return `<g id="ng-${id}" style="cursor:${cursor}">
+        ${shape}
+        <text x="${x}" y="${y + fs * 0.38}" text-anchor="middle"
+              font-family="'Courier New',monospace" font-size="${fs}" font-weight="800"
+              fill="${textFill}" pointer-events="none" letter-spacing="0">${label}</text>
+      </g>`;
+    }
+
+    function render() {
+      const svg = document.getElementById('board');
+      let h = `<defs>
+        <marker id="ah-dim"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#141428"/>
+        </marker>
+        <marker id="ah-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#4caf50"/>
+        </marker>
+        <marker id="ah-blue"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M0,0 L10,5 L0,10 Z" fill="#3b82f6"/>
+        </marker>
+        <filter id="f-green" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="f-blue" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="f-gold" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>`;
+
+      // Subtle band behind X row
+      const xBandY    = ROW_Y[X_ROW_IDX];
+      const startBandY = ROW_Y[ROW_Y.length - 1];
+      h += `<rect x="24" y="${xBandY - R - 10}" width="${W - 48}" height="${(R + 10) * 2}"
+                  fill="rgba(140,15,15,0.07)" rx="8" stroke="rgba(120,10,10,0.12)" stroke-width="1"/>`;
+      h += `<rect x="24" y="${startBandY - R - 10}" width="${W - 48}" height="${(R + 10) * 2}"
+                  fill="rgba(15,80,15,0.06)" rx="8" stroke="rgba(20,80,20,0.10)" stroke-width="1"/>`;
+      h += `<text x="20" y="${startBandY + 5}" font-family="monospace" font-size="9" fill="#1a3a1a" text-anchor="start">START</text>`;
+      h += `<text x="20" y="${xBandY + 5}" font-family="monospace" font-size="9" fill="#3a1010" text-anchor="start">X ROW</text>`;
+
+      // All edges (behind nodes)
+      for (const [from, targets] of Object.entries(OUT))
+        for (const to of targets) h += edgeSVG(from, to);
+
+      // All nodes
+      for (const id of Object.keys(NODES)) h += nodeSVG(id);
+
+      svg.innerHTML = h;
+
+      // Attach click listeners
+      for (const id of Object.keys(NODES)) {
+        const g = svg.querySelector(`#ng-${id}`);
+        if (g) g.addEventListener('click', () => handleClick(id));
+      }
+    }
+
+    // ── Path breadcrumb ───────────────────────────────────────────────────────
+    function updatePathDisplay() {
+      const el = document.getElementById('pathDisplay');
+      if (pathArr.length === 0) { el.innerHTML = ''; return; }
+      el.innerHTML = pathArr.map((id, i) => {
+        const letter = id === 'boss' ? 'BOSS' : NODES[id].letter;
+        const chip   = `<span class="path-chip ${letter}">${id === 'boss' ? '★ BOSS' : letter}</span>`;
+        return (i === 0 ? '' : '<span class="path-sep">›</span>') + chip;
+      }).join('');
+    }
+
+    // ── Interaction ───────────────────────────────────────────────────────────
+    function handleClick(id) {
+      if (won || !available.has(id)) return;
+
+      current = id;
+      pathArr.push(id);
+
+      if (id === 'boss') {
+        won       = true;
+        available = new Set();
+        setStatus('★  You reached the Boss!  ★', '#ffd700');
+      } else {
+        available = new Set(OUT[id]);
+        setStatus(pathArr.length === 1 ? 'Now choose where to go next' : 'Keep climbing…', '#4caf50');
+      }
+
+      render();
+      updatePathDisplay();
+    }
+
+    function setStatus(msg, color) {
+      const el = document.getElementById('statusMsg');
+      el.textContent = msg;
+      el.style.color = color;
+    }
+
+    function resetGame() {
+      current   = null;
+      pathArr   = [];
+      available = new Set(START_ROW);
+      won       = false;
+      setStatus('Select a node on the bottom row to begin', '#445');
+      document.getElementById('pathDisplay').innerHTML = '';
+      render();
+    }
+
+    // ── Boot ──────────────────────────────────────────────────────────────────
+    render();
+  </script>
 
 </body>
 </html>
