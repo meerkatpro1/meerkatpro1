@@ -124,38 +124,38 @@
     const NODES = {
       'boss': { row: 0, col: 2, letter: null },   // centred between col1/col2
 
-      'r1_0': { row: 1, col: 1, letter: 'A' },   // cols 1,2  (gap 0,3)
-      'r1_1': { row: 1, col: 2, letter: 'E' },
+      'r1_0': { row: 1, col: 1, letter: null },   // cols 1,2  (gap 0,3)
+      'r1_1': { row: 1, col: 2, letter: null },
 
-      'r2_0': { row: 2, col: 0, letter: 'A' },   // cols 0,2,3  (gap col1)
-      'r2_1': { row: 2, col: 2, letter: 'E' },
-      'r2_2': { row: 2, col: 3, letter: 'A' },
+      'r2_0': { row: 2, col: 0, letter: null },   // cols 0,2,3  (gap col1)
+      'r2_1': { row: 2, col: 2, letter: null },
+      'r2_2': { row: 2, col: 3, letter: null },
 
-      'r3_0': { row: 3, col: 0, letter: 'A' },   // cols 0,1,2,3  (full)
-      'r3_1': { row: 3, col: 1, letter: 'S' },
-      'r3_2': { row: 3, col: 2, letter: 'A' },
-      'r3_3': { row: 3, col: 3, letter: 'E' },
+      'r3_0': { row: 3, col: 0, letter: null },   // cols 0,1,2,3  (full)
+      'r3_1': { row: 3, col: 1, letter: null },
+      'r3_2': { row: 3, col: 2, letter: null },
+      'r3_3': { row: 3, col: 3, letter: null },
 
-      'r4_0': { row: 4, col: 0, letter: 'X' },   // cols 0,1,3  (gap col2) ← X row
-      'r4_1': { row: 4, col: 1, letter: 'X' },
-      'r4_2': { row: 4, col: 3, letter: 'X' },
+      'r4_0': { row: 4, col: 0, letter: null },   // cols 0,1,3  (gap col2) ← X row
+      'r4_1': { row: 4, col: 1, letter: null },
+      'r4_2': { row: 4, col: 3, letter: null },
 
-      'r5_0': { row: 5, col: 0, letter: 'A' },   // cols 0,1,2,3  (full)
-      'r5_1': { row: 5, col: 1, letter: 'A' },
-      'r5_2': { row: 5, col: 2, letter: 'E' },
-      'r5_3': { row: 5, col: 3, letter: 'S' },
+      'r5_0': { row: 5, col: 0, letter: null },   // cols 0,1,2,3  (full)
+      'r5_1': { row: 5, col: 1, letter: null },
+      'r5_2': { row: 5, col: 2, letter: null },
+      'r5_3': { row: 5, col: 3, letter: null },
 
-      'r6_0': { row: 6, col: 1, letter: 'A' },   // cols 1,2,3  (gap col0)
-      'r6_1': { row: 6, col: 2, letter: 'E' },
-      'r6_2': { row: 6, col: 3, letter: 'A' },
+      'r6_0': { row: 6, col: 1, letter: null },   // cols 1,2,3  (gap col0)
+      'r6_1': { row: 6, col: 2, letter: null },
+      'r6_2': { row: 6, col: 3, letter: null },
 
-      'r7_0': { row: 7, col: 0, letter: 'A' },   // cols 0,1,2  (gap col3)
-      'r7_1': { row: 7, col: 1, letter: 'E' },
-      'r7_2': { row: 7, col: 2, letter: 'A' },
+      'r7_0': { row: 7, col: 0, letter: null },   // cols 0,1,2  (gap col3)
+      'r7_1': { row: 7, col: 1, letter: null },
+      'r7_2': { row: 7, col: 2, letter: null },
 
-      'r8_0': { row: 8, col: 0, letter: 'A' },   // cols 0,2,3  (gap col1) ← start
-      'r8_1': { row: 8, col: 2, letter: 'S' },
-      'r8_2': { row: 8, col: 3, letter: 'E' },
+      'r8_0': { row: 8, col: 0, letter: null },   // cols 0,2,3  (gap col1) ← start
+      'r8_1': { row: 8, col: 2, letter: null },
+      'r8_2': { row: 8, col: 3, letter: null },
     };
 
     // Out-edges: each node points UPWARD to its targets.
@@ -206,6 +206,20 @@
 
     const START_ROW = new Set(['r8_0', 'r8_1', 'r8_2']);
     const X_ROW_IDX = 4;
+
+    // ── Letter generation ─────────────────────────────────────────────────────
+    // Weights match the original proportions: A≈55%, E≈32%, S≈14%
+    const LETTER_POOL = ['A','A','A','A','A','A','A','A','A','A','A','A',
+                         'E','E','E','E','E','E','E',
+                         'S','S','S'];
+
+    function generateLetters() {
+      for (const [id, node] of Object.entries(NODES)) {
+        if (id === 'boss') continue;
+        if (node.row === X_ROW_IDX) { node.letter = 'X'; continue; }
+        node.letter = LETTER_POOL[Math.floor(Math.random() * LETTER_POOL.length)];
+      }
+    }
 
     // ── Layout ────────────────────────────────────────────────────────────────
     // Fixed 4-column x grid; Boss centred manually.
@@ -405,12 +419,14 @@
       pathArr   = [];
       available = new Set(START_ROW);
       won       = false;
+      generateLetters();
       setStatus('Select a node on the bottom row to begin', '#445');
       document.getElementById('pathDisplay').innerHTML = '';
       render();
     }
 
     // ── Boot ──────────────────────────────────────────────────────────────────
+    generateLetters();
     render();
   </script>
 
