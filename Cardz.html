@@ -41,9 +41,17 @@
     .game-header h1 { color: #fff; font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
     #statusMsg { font-size: 0.85rem; color: #445; margin-top: 0.35rem; min-height: 1.3em; }
 
-    .board-wrap {
+    .board-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
       width: 100%;
-      max-width: 640px;
+      max-width: 980px;
+    }
+
+    .board-wrap {
+      flex: 1;
+      min-width: 0;
       background: #06060f;
       border: 2px solid #16163a;
       border-radius: 12px;
@@ -51,12 +59,195 @@
     }
     #board { width: 100%; height: auto; display: block; }
 
+    /* Right-side map menu panel */
+    .map-menu {
+      width: 150px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      background: #111126;
+      border: 1px solid #1e1e3a;
+      border-radius: 10px;
+      padding: 0.9rem 0.75rem;
+      position: sticky;
+      top: 72px;   /* below nav */
+    }
+
+    .map-menu-title {
+      font-size: 0.62rem;
+      color: #445;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid #1e1e3a;
+    }
+
+    .map-menu-btn {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      color: #aab;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.55rem 0.5rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      width: 100%;
+      text-align: center;
+    }
+    .map-menu-btn:hover { background: #22223e; border-color: #3b3b6a; color: #fff; }
+
+    .menu-hp-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding: 0.55rem 0.5rem;
+      background: #0e0e22;
+      border: 1px solid #1e1e3a;
+      border-radius: 7px;
+    }
+    .menu-hp-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .menu-hp-title {
+      font-size: 0.62rem;
+      color: #556;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .menu-hp-value {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #4caf50;
+      font-family: 'Courier New', monospace;
+    }
+    .menu-hp-track {
+      background: #0c0c20;
+      border: 1px solid #1e1e3a;
+      border-radius: 4px;
+      height: 7px;
+      overflow: hidden;
+    }
+    .menu-hp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #145214, #4caf50);
+      border-radius: 4px;
+      transition: width 0.35s ease;
+    }
+
+    .menu-gold-block {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.5rem;
+      background: #0e0e22;
+      border: 1px solid #1e1e3a;
+      border-radius: 7px;
+    }
+    .menu-gold-title {
+      font-size: 0.62rem;
+      color: #556;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .menu-gold-value {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #f5c842;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ── Win screen ─────────────────────────────────────────────────────────── */
+    .win-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 18, 0.92);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .win-overlay.hidden { display: none; }
+
+    .win-modal {
+      background: #111126;
+      border: 1px solid #2a2a4a;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      padding: 1.6rem 1.4rem 1.4rem;
+    }
+
+    .win-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffd700;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .win-gold-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f5c842;
+      font-family: 'Courier New', monospace;
+    }
+
+    .win-card-label {
+      font-size: 0.72rem;
+      color: #556;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .win-card-choices {
+      display: flex;
+      gap: 0.7rem;
+      justify-content: center;
+    }
+
+    .win-card-choices .card {
+      flex: 1;
+      max-width: 145px;
+      cursor: pointer;
+    }
+    .win-card-choices .card:hover {
+      border-color: #ffd700;
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.3);
+    }
+
+    .win-skip-btn {
+      align-self: center;
+      background: none;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      color: #556;
+      font-size: 0.8rem;
+      padding: 0.45rem 1.4rem;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .win-skip-btn:hover { border-color: #666; color: #aab; }
+
     .controls {
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      max-width: 640px;
+      max-width: 980px;
       gap: 1rem;
     }
 
@@ -82,6 +273,423 @@
       cursor: pointer; white-space: nowrap; transition: background 0.15s; flex-shrink: 0;
     }
     .reset-btn:hover { background: #3a2020; }
+
+    /* ── Battle screen ──────────────────────────────────────────────────────── */
+    .battle-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0d0d1a;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 1rem 1.5rem;
+      overflow-y: auto;
+    }
+    .battle-overlay.hidden { display: none; }
+
+    .battle-content {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      flex: 1;
+    }
+
+    /* Top half — enemy */
+    .battle-top {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.6rem 0;
+    }
+
+    .enemy-info-box {
+      width: 150px;
+      min-height: 110px;
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      padding: 0.7rem 0.8rem;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .info-title {
+      font-size: 0.65rem;
+      color: #556;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .info-body {
+      font-size: 0.78rem;
+      color: #778;
+      line-height: 1.5;
+    }
+
+    .enemy-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .enemy-emoji-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      font-size: 2.8rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* Health bars */
+    .hp-label {
+      font-size: 0.68rem;
+      color: #556;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+    .hp-track {
+      background: #0c0c20;
+      border: 1px solid #1e1e3a;
+      border-radius: 5px;
+      height: 18px;
+      overflow: hidden;
+    }
+    .hp-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.35s ease;
+    }
+    .hp-fill.enemy  { background: linear-gradient(90deg, #8b0000, #e94560); }
+    .hp-fill.player { background: linear-gradient(90deg, #145214, #4caf50); }
+
+    .battle-divider {
+      border: none;
+      border-top: 1px solid #1e1e3a;
+      flex-shrink: 0;
+    }
+
+    /* Bottom half — player */
+    .battle-bottom {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .player-hp-area {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .battle-main-row {
+      flex: 1;
+      display: flex;
+      align-items: stretch;
+      gap: 0.8rem;
+      min-height: 160px;
+    }
+
+    .ap-counter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      padding: 0.7rem 0.6rem;
+      min-width: 58px;
+      flex-shrink: 0;
+    }
+    .ap-label {
+      font-size: 0.62rem;
+      color: #556;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .ap-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #3b82f6;
+      font-family: 'Courier New', monospace;
+      line-height: 1;
+    }
+    .ap-dots {
+      display: flex;
+      gap: 3px;
+      margin-top: 2px;
+    }
+    .ap-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #3b82f6;
+      border: 1px solid #1a3a8a;
+    }
+    .ap-dot.empty { background: #0c1a30; }
+
+    .game-space {
+      flex: 1;
+      background: #06060f;
+      border: 2px solid #16163a;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Cards in hand */
+    .hand-grid {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.6rem;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    .hand-card {
+      flex: 1;
+      min-width: 0;
+      background: #0e0e22;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      padding: 0.5rem 0.4rem 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+      user-select: none;
+    }
+    .hand-card:hover:not(.card-disabled) {
+      border-color: #4caf50;
+      box-shadow: 0 0 14px rgba(76,175,80,0.35);
+      transform: translateY(-5px);
+    }
+    .hand-card.card-disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
+
+    .hand-card-ap {
+      position: absolute;
+      top: 0.3rem; left: 0.35rem;
+      width: 18px; height: 18px;
+      background: #1a4fa8;
+      border: 1px solid #2563eb;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 800;
+      color: #fff; font-family: 'Courier New', monospace;
+    }
+
+    .hand-card-name {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #dde;
+      text-align: center;
+      margin-top: 1.1rem;
+      line-height: 1.25;
+    }
+
+    .hand-card-hr {
+      border: none;
+      border-top: 1px solid #1e1e3a;
+      margin: 0;
+    }
+
+    .hand-card-desc {
+      font-size: 0.6rem;
+      color: #668;
+      text-align: center;
+      line-height: 1.35;
+      margin-top: auto;
+    }
+
+    /* Block display */
+    .block-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+      background: #0e0e22;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      padding: 0.35rem 0.5rem;
+    }
+    .block-icon { font-size: 0.9rem; line-height: 1; }
+    .block-val  {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #aac4e0;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Enemy-turn flash */
+    @keyframes enemy-flash {
+      0%,100% { background: #0d0d1a; }
+      50%      { background: #1a0808; }
+    }
+    .battle-overlay.enemy-turn { animation: enemy-flash 0.5s ease 1; }
+
+    .side-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .side-btn {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      color: #aab;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.55rem 1rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .side-btn:hover { background: #22223e; border-color: #3b3b6a; color: #fff; }
+
+    .end-turn-btn {
+      background: #1a4fa8;
+      border-color: #2563eb;
+      color: #fff;
+    }
+    .end-turn-btn:hover { background: #2563eb; border-color: #3b82f6; color: #fff; }
+
+
+    /* ── Deck viewer modal ──────────────────────────────────────────────────── */
+    .deck-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 18, 0.88);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .deck-overlay.hidden { display: none; }
+
+    .deck-modal {
+      background: #111126;
+      border: 1px solid #2a2a4a;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .deck-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.2rem 0.8rem;
+      border-bottom: 1px solid #1e1e3a;
+      flex-shrink: 0;
+    }
+    .deck-modal-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+    .deck-count {
+      font-size: 0.75rem;
+      color: #556;
+    }
+    .deck-close-btn {
+      background: none;
+      border: none;
+      color: #556;
+      font-size: 1.2rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.15s;
+      padding: 0 0.2rem;
+    }
+    .deck-close-btn:hover { color: #fff; }
+
+    .deck-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+      padding: 1rem 1.2rem 1.2rem;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: #0e0e22;
+      border: 1px solid #2a2a4a;
+      border-radius: 9px;
+      padding: 0.65rem 0.7rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      position: relative;
+      min-height: 110px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .card:hover {
+      border-color: #3b3b6a;
+      box-shadow: 0 4px 16px rgba(59, 59, 160, 0.25);
+    }
+
+    .card-ap {
+      position: absolute;
+      top: 0.45rem;
+      left: 0.5rem;
+      width: 22px;
+      height: 22px;
+      background: #1a4fa8;
+      border: 1px solid #2563eb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+    }
+
+    .card-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #dde;
+      text-align: center;
+      margin-top: 1.4rem;
+      line-height: 1.2;
+    }
+
+    .card-divider {
+      border: none;
+      border-top: 1px solid #1e1e3a;
+    }
+
+    .card-desc {
+      font-size: 0.72rem;
+      color: #778;
+      text-align: center;
+      line-height: 1.45;
+    }
   </style>
 </head>
 <body>
@@ -97,8 +705,27 @@
       <div id="statusMsg">Select a node on the bottom row to begin</div>
     </div>
 
-    <div class="board-wrap">
-      <svg id="board" viewBox="0 0 640 820"></svg>
+    <div class="board-row">
+      <div class="board-wrap">
+        <svg id="board" viewBox="0 0 640 820"></svg>
+      </div>
+      <div class="map-menu">
+        <div class="map-menu-title">Menu</div>
+        <div class="menu-hp-block">
+          <div class="menu-hp-label">
+            <span class="menu-hp-title">HP</span>
+            <span class="menu-hp-value" id="menuHpValue">70 / 70</span>
+          </div>
+          <div class="menu-hp-track">
+            <div class="menu-hp-fill" id="menuHpFill" style="width:100%"></div>
+          </div>
+        </div>
+        <div class="menu-gold-block">
+          <span class="menu-gold-title">Gold</span>
+          <span class="menu-gold-value" id="menuGoldValue">🪙 0</span>
+        </div>
+        <button class="map-menu-btn" onclick="openDeck()">Deck</button>
+      </div>
     </div>
 
     <div class="controls">
@@ -107,118 +734,208 @@
     </div>
   </div>
 
+  <!-- ── Deck viewer ──────────────────────────────────────────────────────── -->
+  <div id="deckOverlay" class="deck-overlay hidden">
+    <div class="deck-modal">
+      <div class="deck-modal-header">
+        <span class="deck-modal-title">Deck</span>
+        <span class="deck-count" id="deckCount"></span>
+        <button class="deck-close-btn" onclick="closeDeck()">✕</button>
+      </div>
+      <div class="deck-grid" id="deckGrid"></div>
+    </div>
+  </div>
+
+  <!-- ── Battle win screen ───────────────────────────────────────────────── -->
+  <div id="winScreen" class="win-overlay hidden">
+    <div class="win-modal">
+      <div class="win-title">Victory! ★</div>
+      <div class="win-gold-row" id="winGoldRow"></div>
+      <div class="win-card-label">Choose a card to add to your deck</div>
+      <div class="win-card-choices" id="winCardChoices"></div>
+      <button class="win-skip-btn" onclick="skipCardReward()">Skip</button>
+    </div>
+  </div>
+
+  <!-- ── Battle screen overlay ────────────────────────────────────────────── -->
+  <div id="battleScreen" class="battle-overlay hidden">
+    <div class="battle-content">
+
+      <!-- Top half: enemy -->
+      <div class="battle-top">
+        <div class="enemy-info-box">
+          <div class="info-title">Info</div>
+          <div class="info-body" id="battleInfo"></div>
+        </div>
+        <div class="enemy-center">
+          <div class="hp-label">
+            <span id="enemyName">Enemy</span>
+            <span id="enemyHpText">10 / 10</span>
+          </div>
+          <div class="hp-track">
+            <div class="hp-fill enemy" id="enemyHpFill" style="width:100%"></div>
+          </div>
+        </div>
+        <div class="enemy-emoji-wrap" id="enemyEmoji">👹</div>
+      </div>
+
+      <hr class="battle-divider" />
+
+      <!-- Bottom half: player -->
+      <div class="battle-bottom">
+        <div class="player-hp-area">
+          <div class="hp-label">
+            <span>Player</span>
+            <span id="playerHpText">20 / 20</span>
+          </div>
+          <div class="hp-track">
+            <div class="hp-fill player" id="playerHpFill" style="width:100%"></div>
+          </div>
+        </div>
+
+        <div class="battle-main-row">
+          <div class="ap-counter">
+            <div class="ap-label">AP</div>
+            <div class="ap-value" id="apValue">3/3</div>
+            <div class="ap-dots" id="apDots">
+              <div class="ap-dot"></div>
+              <div class="ap-dot"></div>
+              <div class="ap-dot"></div>
+            </div>
+          </div>
+
+          <div class="game-space" id="gameSpace"></div>
+
+          <div class="side-buttons">
+            <div class="block-display">
+              <div class="block-icon">🛡️</div>
+              <div class="block-val" id="blockVal">0</div>
+            </div>
+            <button class="side-btn end-turn-btn" id="endTurnBtn" onclick="endPlayerTurn()">End Turn</button>
+            <button class="side-btn" onclick="openDeck()">Deck</button>
+            <button class="side-btn">Discard</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script>
-    // ── Graph ─────────────────────────────────────────────────────────────────
-    // 9 rows (row 0 = Boss top, row 8 = start bottom).
-    // Nodes use a fixed 4-column grid (cols 0-3). Some rows skip columns
-    // intentionally to create visual variance. Cross-arrows bridge the gaps.
-    //
-    // Column x positions: col0=95  col1=245  col2=395  col3=545
-    // Row gaps (missing cols):
-    //   row2: gap col1      row4(X): gap col2     row6: gap col0
-    //   row7: gap col3      row8: gap col1
-    //
-    // Letters: A=12 (most), E=7 (second), S=3 (third), X=3 (one row only)
-    // In-degree rule: every node receives 1-2 arrows
+    // ── Graph (rebuilt on every reset) ───────────────────────────────────────
+    // 9 rows: row 0 = Boss, rows 1-7 = middle (2-4 nodes each, random cols),
+    // row 8 = start (2-3 nodes). One row in 2-6 is the X row.
+    // In-degree rule: every node receives 1-2 arrows.
 
-    const NODES = {
-      'boss': { row: 0, col: 2, letter: null },   // centred between col1/col2
+    let NODES = {};
+    let OUT   = {};
+    let START_ROW = new Set();
+    let X_ROW_IDX = 4;
 
-      'r1_0': { row: 1, col: 1, letter: null },   // cols 1,2  (gap 0,3)
-      'r1_1': { row: 1, col: 2, letter: null },
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
 
-      'r2_0': { row: 2, col: 0, letter: null },   // cols 0,2,3  (gap col1)
-      'r2_1': { row: 2, col: 2, letter: null },
-      'r2_2': { row: 2, col: 3, letter: null },
-
-      'r3_0': { row: 3, col: 0, letter: null },   // cols 0,1,2,3  (full)
-      'r3_1': { row: 3, col: 1, letter: null },
-      'r3_2': { row: 3, col: 2, letter: null },
-      'r3_3': { row: 3, col: 3, letter: null },
-
-      'r4_0': { row: 4, col: 0, letter: null },   // cols 0,1,3  (gap col2) ← X row
-      'r4_1': { row: 4, col: 1, letter: null },
-      'r4_2': { row: 4, col: 3, letter: null },
-
-      'r5_0': { row: 5, col: 0, letter: null },   // cols 0,1,2,3  (full)
-      'r5_1': { row: 5, col: 1, letter: null },
-      'r5_2': { row: 5, col: 2, letter: null },
-      'r5_3': { row: 5, col: 3, letter: null },
-
-      'r6_0': { row: 6, col: 1, letter: null },   // cols 1,2,3  (gap col0)
-      'r6_1': { row: 6, col: 2, letter: null },
-      'r6_2': { row: 6, col: 3, letter: null },
-
-      'r7_0': { row: 7, col: 0, letter: null },   // cols 0,1,2  (gap col3)
-      'r7_1': { row: 7, col: 1, letter: null },
-      'r7_2': { row: 7, col: 2, letter: null },
-
-      'r8_0': { row: 8, col: 0, letter: null },   // cols 0,2,3  (gap col1) ← start
-      'r8_1': { row: 8, col: 2, letter: null },
-      'r8_2': { row: 8, col: 3, letter: null },
-    };
-
-    // Out-edges: each node points UPWARD to its targets.
-    // In-degrees shown inline; all are 1 or 2.
-    const OUT = {
-      'boss': [],
-      // boss ← r1_0, r1_1  (in=2) ✓
-      'r1_0': ['boss'],
-      'r1_1': ['boss'],
-      // r1_0 ← r2_0, r2_1  (in=2) ✓   r1_1 ← r2_1, r2_2  (in=2) ✓
-      'r2_0': ['r1_0'],
-      'r2_1': ['r1_0', 'r1_1'],
-      'r2_2': ['r1_1'],
-      // r2_0 ← r3_0, r3_1  (in=2) ✓   r2_1 ← r3_1, r3_2  (in=2) ✓   r2_2 ← r3_2, r3_3  (in=2) ✓
-      'r3_0': ['r2_0'],
-      'r3_1': ['r2_0', 'r2_1'],
-      'r3_2': ['r2_1', 'r2_2'],
-      'r3_3': ['r2_2'],
-      // r3_0 ← r4_0        (in=1) ✓   r3_1 ← r4_0, r4_1  (in=2) ✓
-      // r3_2 ← r4_1, r4_2  (in=2) ✓   r3_3 ← r4_2        (in=1) ✓
-      // r4_2 is col3 → r3_2 col2: deliberate cross-arrow over the gap
-      'r4_0': ['r3_0', 'r3_1'],
-      'r4_1': ['r3_1', 'r3_2'],
-      'r4_2': ['r3_2', 'r3_3'],
-      // r4_0 ← r5_0, r5_1  (in=2) ✓   r4_1 ← r5_1, r5_2  (in=2) ✓
-      // r4_2 ← r5_2, r5_3  (in=2) ✓  — r5_2(col2)→r4_2(col3): cross over gap
-      'r5_0': ['r4_0'],
-      'r5_1': ['r4_0', 'r4_1'],
-      'r5_2': ['r4_1', 'r4_2'],
-      'r5_3': ['r4_2'],
-      // r5_0 ← r6_0        (in=1) ✓   r5_1 ← r6_0, r6_1  (in=2) ✓
-      // r5_2 ← r6_1, r6_2  (in=2) ✓   r5_3 ← r6_2        (in=1) ✓
-      // r6_0 is col1 → r5_0 col0: cross-arrow over gap col0
-      'r6_0': ['r5_0', 'r5_1'],
-      'r6_1': ['r5_1', 'r5_2'],
-      'r6_2': ['r5_2', 'r5_3'],
-      // r6_0 ← r7_0, r7_1  (in=2) ✓   r6_1 ← r7_1, r7_2  (in=2) ✓
-      // r6_2 ← r7_2        (in=1) ✓   — r7_2(col2)→r6_2(col3): cross over gap col3
-      'r7_0': ['r6_0'],
-      'r7_1': ['r6_0', 'r6_1'],
-      'r7_2': ['r6_1', 'r6_2'],
-      // r7_0 ← r8_0        (in=1) ✓   r7_1 ← r8_0, r8_1  (in=2) ✓
-      // r7_2 ← r8_1, r8_2  (in=2) ✓   — r8_0(col0)→r7_1(col1) & r8_1(col2)→r7_1(col1)
-      'r8_0': ['r7_0', 'r7_1'],
-      'r8_1': ['r7_1', 'r7_2'],
-      'r8_2': ['r7_2'],
-    };
-
-    const START_ROW = new Set(['r8_0', 'r8_1', 'r8_2']);
-    const X_ROW_IDX = 4;
-
-    // ── Letter generation ─────────────────────────────────────────────────────
-    // Weights match the original proportions: A≈55%, E≈32%, S≈14%
+    // Weighted letter pick: A≈55%, E≈32%, S≈14%
     const LETTER_POOL = ['A','A','A','A','A','A','A','A','A','A','A','A',
                          'E','E','E','E','E','E','E',
                          'S','S','S'];
+    function pickLetter() {
+      return LETTER_POOL[Math.floor(Math.random() * LETTER_POOL.length)];
+    }
 
-    function generateLetters() {
-      for (const [id, node] of Object.entries(NODES)) {
-        if (id === 'boss') continue;
-        if (node.row === X_ROW_IDX) { node.letter = 'X'; continue; }
-        node.letter = LETTER_POOL[Math.floor(Math.random() * LETTER_POOL.length)];
+    // Build edges from belowIds → aboveIds.
+    // Guarantees: every below node out-degree ≥1, every above node in-degree 1-2.
+    function connectRows(belowIds, aboveIds) {
+      const colOf  = id => id === 'boss' ? 1.5 : NODES[id].col;
+      const inDeg  = Object.fromEntries(aboveIds.map(id => [id, 0]));
+      const outDeg = Object.fromEntries(belowIds.map(id => [id, 0]));
+      const edges  = Object.fromEntries(belowIds.map(id => [id, []]));
+
+      function addEdge(bId, aId) {
+        edges[bId].push(aId); inDeg[aId]++; outDeg[bId]++;
       }
+
+      // Pass 1: every below node gets at least 1 outgoing edge
+      for (const bId of belowIds) {
+        const bCol = colOf(bId);
+        const cands = aboveIds
+          .filter(a => inDeg[a] < 2 && !edges[bId].includes(a))
+          .sort((a1, a2) => Math.abs(colOf(a1) - bCol) - Math.abs(colOf(a2) - bCol));
+        // fallback: ignore in-degree cap if no capacity left
+        const pick = cands[0] ?? aboveIds
+          .filter(a => !edges[bId].includes(a))
+          .sort((a1, a2) => Math.abs(colOf(a1) - bCol) - Math.abs(colOf(a2) - bCol))[0];
+        if (pick) addEdge(bId, pick);
+      }
+
+      // Pass 2: every above node gets at least 1 incoming edge
+      for (const aId of aboveIds) {
+        if (inDeg[aId] > 0) continue;
+        const aCol = colOf(aId);
+        const cands = belowIds
+          .filter(b => outDeg[b] < 2 && !edges[b].includes(aId))
+          .sort((b1, b2) => Math.abs(colOf(b1) - aCol) - Math.abs(colOf(b2) - aCol));
+        const pick = cands[0] ?? belowIds
+          .filter(b => !edges[b].includes(aId))
+          .sort((b1, b2) => outDeg[b1] - outDeg[b2])[0];
+        if (pick) addEdge(pick, aId);
+      }
+
+      // Pass 3: optional second edges for visual variety
+      for (const bId of belowIds) {
+        if (outDeg[bId] >= 2) continue;
+        const bCol = colOf(bId);
+        const cands = aboveIds
+          .filter(a => inDeg[a] < 2 && !edges[bId].includes(a))
+          .sort((a1, a2) => Math.abs(colOf(a1) - bCol) - Math.abs(colOf(a2) - bCol));
+        if (cands.length) addEdge(bId, cands[Math.floor(Math.random() * Math.min(2, cands.length))]);
+      }
+      return edges;
+    }
+
+    // ── Graph generation ──────────────────────────────────────────────────────
+    function generateGraph() {
+      NODES = { 'boss': { row: 0, col: 1, letter: null } };
+      OUT   = { 'boss': [] };
+
+      // Random row sizes: row1=2, rows2-7=2-4, row8=2-3
+      const sizes = [0, 2];
+      for (let r = 2; r <= 7; r++) sizes.push(Math.floor(Math.random() * 3) + 2);
+      sizes.push(Math.floor(Math.random() * 2) + 2);
+
+      // Pick a random X row (rows 2-6)
+      X_ROW_IDX = Math.floor(Math.random() * 5) + 2;
+
+      // Build nodes row by row
+      const rowIds = [['boss']];
+      for (let r = 1; r <= 8; r++) {
+        const cols = shuffle([0, 1, 2, 3]).slice(0, sizes[r]).sort((a, b) => a - b);
+        const ids  = cols.map((c, i) => {
+          const id     = `r${r}_${i}`;
+          const letter = r === X_ROW_IDX ? 'X' : pickLetter();
+          NODES[id] = { row: r, col: c, letter };
+          OUT[id]   = [];
+          return id;
+        });
+        rowIds.push(ids);
+      }
+
+      // Build edges bottom → top
+      for (let r = 8; r >= 1; r--) {
+        const below  = rowIds[r];
+        const above  = r === 1 ? ['boss'] : rowIds[r - 1];
+        const edges  = connectRows(below, above);
+        for (const [bId, targets] of Object.entries(edges)) OUT[bId] = targets;
+      }
+
+      START_ROW = new Set(rowIds[8]);
     }
 
     // ── Layout ────────────────────────────────────────────────────────────────
@@ -242,10 +959,65 @@
       return pts.join(' ');
     }
 
+    // ── Player health & gold ──────────────────────────────────────────────────
+    const PLAYER_MAX_HP = 70;
+    let   playerHp      = PLAYER_MAX_HP;
+    let   playerGold    = 0;
+
+    function setGold(val) {
+      playerGold = Math.max(0, val);
+      document.getElementById('menuGoldValue').textContent = `🪙 ${playerGold}`;
+    }
+
+    function setPlayerHp(val) {
+      playerHp = Math.max(0, Math.min(PLAYER_MAX_HP, val));
+      const pct = (playerHp / PLAYER_MAX_HP * 100).toFixed(1) + '%';
+      document.getElementById('menuHpValue').textContent  = `${playerHp} / ${PLAYER_MAX_HP}`;
+      document.getElementById('menuHpFill').style.width   = pct;
+      // also sync battle screen bar if open
+      document.getElementById('playerHpText').textContent = `${playerHp} / ${PLAYER_MAX_HP}`;
+      document.getElementById('playerHpFill').style.width = pct;
+    }
+
+    // ── Deck ──────────────────────────────────────────────────────────────────
+    const CARD_DEFS = {
+      'Basic Block':  { ap: 1, desc: 'Play to add +5 block.' },
+      'Basic Attack': { ap: 1, desc: 'Play to attack for 5.' },
+    };
+
+    const playerDeck = [
+      ...Array(5).fill('Basic Block'),
+      ...Array(5).fill('Basic Attack'),
+    ];
+
+    function openDeck() {
+      const grid = document.getElementById('deckGrid');
+      document.getElementById('deckCount').textContent = `${playerDeck.length} cards`;
+      grid.innerHTML = playerDeck.map(name => {
+        const def = CARD_DEFS[name];
+        return `<div class="card">
+          <div class="card-ap">${def.ap}</div>
+          <div class="card-name">${name}</div>
+          <hr class="card-divider" />
+          <div class="card-desc">${def.desc}</div>
+        </div>`;
+      }).join('');
+      document.getElementById('deckOverlay').classList.remove('hidden');
+    }
+
+    function closeDeck() {
+      document.getElementById('deckOverlay').classList.add('hidden');
+    }
+
+    // Close deck on backdrop click
+    document.getElementById('deckOverlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('deckOverlay')) closeDeck();
+    });
+
     // ── Game state ────────────────────────────────────────────────────────────
     let current   = null;
     let pathArr   = [];
-    let available = new Set(START_ROW);
+    let available = new Set();
     let won       = false;
 
     function isPathEdge(a, b) {
@@ -388,6 +1160,212 @@
       }).join('');
     }
 
+    // ── Battle screen ─────────────────────────────────────────────────────────
+    const ENEMY_ROSTER = [
+      { name: 'Goblin',   emoji: '👺', hp: 40,  info: '' },
+      { name: 'Skeleton', emoji: '💀', hp: 35, info: '' },
+      { name: 'Slime',    emoji: '🟢', hp: 23, info: '' },
+    ];
+
+    const BATTLE_MAX_AP = 3;
+    let battleNodeId  = null;
+    let battleEnemy   = null;
+    let enemyHp       = 0;
+    let enemyMaxHp    = 0;
+    let battleAp      = BATTLE_MAX_AP;
+    let playerBlock   = 0;
+    let battleDeck    = shuffle([...playerDeck]);  // persistent draw pile
+    let battleDiscard = [];                         // persistent discard pile
+    let battleHand    = [];
+    let isPlayerTurn  = true;
+
+    function drawHand() {
+      while (battleHand.length < 5) {
+        if (battleDeck.length === 0) {
+          if (battleDiscard.length === 0) break;
+          battleDeck    = shuffle([...battleDiscard]);
+          battleDiscard = [];
+        }
+        battleHand.push(battleDeck.pop());
+      }
+    }
+
+    function refreshApDots(cur, max) {
+      document.getElementById('apDots').innerHTML =
+        Array.from({ length: max }, (_, i) =>
+          `<div class="ap-dot${i < cur ? '' : ' empty'}"></div>`
+        ).join('');
+    }
+
+    function renderBattleUI() {
+      // Enemy HP
+      const ePct = (enemyHp / enemyMaxHp * 100).toFixed(1) + '%';
+      document.getElementById('enemyHpText').textContent = `${enemyHp} / ${enemyMaxHp}`;
+      document.getElementById('enemyHpFill').style.width = ePct;
+
+      // Player HP (setPlayerHp syncs both bars)
+      setPlayerHp(playerHp);
+
+      // AP
+      document.getElementById('apValue').textContent = `${battleAp}/${BATTLE_MAX_AP}`;
+      refreshApDots(battleAp, BATTLE_MAX_AP);
+
+      // Block
+      document.getElementById('blockVal').textContent = playerBlock;
+
+      // Hand
+      renderHand();
+    }
+
+    function renderHand() {
+      const gs = document.getElementById('gameSpace');
+      if (battleHand.length === 0) {
+        gs.innerHTML = `<div style="color:#334;font-size:0.78rem;padding:1rem;text-align:center;width:100%">No cards remaining</div>`;
+        return;
+      }
+      gs.innerHTML = `<div class="hand-grid">${battleHand.map((name, i) => {
+        const def      = CARD_DEFS[name];
+        const canPlay  = isPlayerTurn && def.ap <= battleAp;
+        return `<div class="hand-card${canPlay ? '' : ' card-disabled'}" onclick="playCard(${i})">
+          <div class="hand-card-ap">${def.ap}</div>
+          <div class="hand-card-name">${name}</div>
+          <hr class="hand-card-hr" />
+          <div class="hand-card-desc">${def.desc}</div>
+        </div>`;
+      }).join('')}</div>`;
+    }
+
+    function playCard(index) {
+      if (!isPlayerTurn) return;
+      const name = battleHand[index];
+      if (!name) return;
+      const def = CARD_DEFS[name];
+      if (def.ap > battleAp) return;
+
+      battleAp -= def.ap;
+      battleHand.splice(index, 1);
+      battleDiscard.push(name);
+
+      if (name === 'Basic Block')  playerBlock += 5;
+      if (name === 'Basic Attack') enemyHp = Math.max(0, enemyHp - 5);
+
+      renderBattleUI();
+
+      if (enemyHp <= 0) {
+        setTimeout(() => {
+          // Flush hand + discard back into draw pile
+          battleDiscard.push(...battleHand);
+          battleHand    = [];
+          battleDeck    = shuffle([...battleDeck, ...battleDiscard]);
+          battleDiscard = [];
+          showWinScreen();
+        }, 350);
+      }
+    }
+
+    function endPlayerTurn() {
+      if (!isPlayerTurn) return;
+      isPlayerTurn = false;
+      document.getElementById('endTurnBtn').disabled = true;
+
+      // Enemy attacks after a short pause
+      setTimeout(() => {
+        const raw      = 10;
+        const absorbed = Math.min(playerBlock, raw);
+        playerBlock    = 0;
+        setPlayerHp(playerHp - (raw - absorbed));
+
+        // Flash the battle screen red briefly
+        const bs = document.getElementById('battleScreen');
+        bs.classList.add('enemy-turn');
+        setTimeout(() => bs.classList.remove('enemy-turn'), 500);
+
+        if (playerHp <= 0) {
+          setTimeout(() => {
+            closeBattle();
+            resetGame();
+          }, 400);
+          return;
+        }
+
+        // Start player turn
+        battleAp = BATTLE_MAX_AP;
+        battleDiscard.push(...battleHand);
+        battleHand   = [];
+        isPlayerTurn = true;
+        document.getElementById('endTurnBtn').disabled = false;
+        drawHand();
+        renderBattleUI();
+      }, 500);
+    }
+
+    // ── Win screen ────────────────────────────────────────────────────────────
+    let pendingGold = 0;
+
+    function showWinScreen() {
+      pendingGold = Math.floor(Math.random() * 21) + 10;  // 10-30
+      document.getElementById('winGoldRow').textContent = `+ ${pendingGold} gold`;
+
+      // Pick 3 random cards from available types (repeats allowed)
+      const cardNames = Object.keys(CARD_DEFS);
+      const choices   = Array.from({ length: 3 }, () =>
+        cardNames[Math.floor(Math.random() * cardNames.length)]
+      );
+      document.getElementById('winCardChoices').innerHTML = choices.map(name => {
+        const def = CARD_DEFS[name];
+        return `<div class="card" onclick="claimCardReward('${name}')">
+          <div class="card-ap">${def.ap}</div>
+          <div class="card-name">${name}</div>
+          <hr class="card-divider" />
+          <div class="card-desc">${def.desc}</div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('winScreen').classList.remove('hidden');
+    }
+
+    function claimCardReward(name) {
+      playerDeck.push(name);
+      battleDeck.push(name);         // also goes into the persistent draw pile
+      finishBattle();
+    }
+
+    function skipCardReward() {
+      finishBattle();
+    }
+
+    function finishBattle() {
+      setGold(playerGold + pendingGold);
+      document.getElementById('winScreen').classList.add('hidden');
+      closeBattle();
+      setStatus('Enemy defeated! Keep climbing…', '#4caf50');
+    }
+
+    function openBattle(nodeId) {
+      battleNodeId  = nodeId;
+      battleEnemy   = ENEMY_ROSTER[Math.floor(Math.random() * ENEMY_ROSTER.length)];
+      enemyHp       = battleEnemy.hp;
+      enemyMaxHp    = battleEnemy.hp;
+      battleAp     = BATTLE_MAX_AP;
+      playerBlock  = 0;
+      isPlayerTurn = true;
+      battleHand   = [];
+      drawHand();
+
+      document.getElementById('enemyName').textContent  = battleEnemy.name;
+      document.getElementById('enemyEmoji').textContent = battleEnemy.emoji;
+      document.getElementById('battleInfo').textContent = battleEnemy.info;
+      document.getElementById('endTurnBtn').disabled    = false;
+
+      renderBattleUI();
+      document.getElementById('battleScreen').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function closeBattle() {
+      document.getElementById('battleScreen').classList.add('hidden');
+    }
+
     // ── Interaction ───────────────────────────────────────────────────────────
     function handleClick(id) {
       if (won || !available.has(id)) return;
@@ -399,13 +1377,20 @@
         won       = true;
         available = new Set();
         setStatus('★  You reached the Boss!  ★', '#ffd700');
+        render();
+        updatePathDisplay();
+      } else if (NODES[id].letter === 'A') {
+        available = new Set(OUT[id]);
+        setStatus('Entering combat…', '#e94560');
+        render();
+        updatePathDisplay();
+        openBattle(id);
       } else {
         available = new Set(OUT[id]);
         setStatus(pathArr.length === 1 ? 'Now choose where to go next' : 'Keep climbing…', '#4caf50');
+        render();
+        updatePathDisplay();
       }
-
-      render();
-      updatePathDisplay();
     }
 
     function setStatus(msg, color) {
@@ -414,19 +1399,34 @@
       el.style.color = color;
     }
 
+    const DEFAULT_DECK = [
+      ...Array(5).fill('Basic Block'),
+      ...Array(5).fill('Basic Attack'),
+    ];
+
     function resetGame() {
+      // Reset player state
+      setPlayerHp(PLAYER_MAX_HP);
+      setGold(0);
+      playerDeck.splice(0, playerDeck.length, ...DEFAULT_DECK);
+      battleDeck    = shuffle([...DEFAULT_DECK]);
+      battleDiscard = [];
+      battleHand    = [];
+
+      // Reset map state
       current   = null;
       pathArr   = [];
-      available = new Set(START_ROW);
       won       = false;
-      generateLetters();
+      generateGraph();
+      available = new Set(START_ROW);
       setStatus('Select a node on the bottom row to begin', '#445');
       document.getElementById('pathDisplay').innerHTML = '';
       render();
     }
 
     // ── Boot ──────────────────────────────────────────────────────────────────
-    generateLetters();
+    generateGraph();
+    available = new Set(START_ROW);
     render();
   </script>
 
