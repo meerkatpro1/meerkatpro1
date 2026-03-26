@@ -742,7 +742,7 @@
         if (gameActive) enemyInterval = setInterval(enemyTick, speed);
       }, grace);
 
-      // Enemy position pulse: first at 3s, then every 5s, lasts 1s each
+      // Enemy position pulse: immediately on level start, then every 4s, lasts 1s each
       function triggerPulse() {
         if (!gameActive) return;
         enemyPulsing = true;
@@ -752,11 +752,8 @@
           draw();
         }, 1000);
       }
-      setTimeout(() => {
-        if (!gameActive) return;
-        triggerPulse();
-        pulseInterval = setInterval(triggerPulse, 5000);
-      }, 3000);
+      triggerPulse();
+      pulseInterval = setInterval(triggerPulse, 4000);
     }
 
     function resetGame() {
