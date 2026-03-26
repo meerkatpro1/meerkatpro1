@@ -220,8 +220,6 @@
     }
 
     .win-card-choices .card {
-      flex: 1;
-      max-width: 145px;
       cursor: pointer;
     }
     .win-card-choices .card:hover {
@@ -371,10 +369,34 @@
     .hp-fill.enemy  { background: linear-gradient(90deg, #8b0000, #e94560); }
     .hp-fill.player { background: linear-gradient(90deg, #145214, #4caf50); }
 
-    .battle-divider {
-      border: none;
-      border-top: 1px solid #1e1e3a;
+    .battle-mid {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
       flex-shrink: 0;
+      padding: 0.1rem 0;
+    }
+    .battle-mid::before, .battle-mid::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #1e1e3a;
+    }
+    .combo-box {
+      background: #1a0a00;
+      border: 2px solid #ff8c00;
+      border-radius: 7px;
+      padding: 0.25rem 0.75rem;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 0 8px rgba(255,140,0,0.25);
+    }
+    .combo-value {
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #ff8c00;
+      letter-spacing: 0.04em;
     }
 
     /* Bottom half — player */
@@ -454,12 +476,14 @@
       gap: 0.5rem;
       padding: 0.6rem;
       width: 100%;
-      align-items: stretch;
+      align-items: flex-start;
+      justify-content: flex-start;
     }
 
     .hand-card {
-      flex: 1;
-      min-width: 0;
+      width: 80px;
+      height: 120px;
+      flex-shrink: 0;
       background: #0e0e22;
       border: 1px solid #2a2a4a;
       border-radius: 8px;
@@ -480,6 +504,11 @@
     .hand-card.card-disabled {
       opacity: 0.38;
       cursor: not-allowed;
+    }
+    .hand-card-empty {
+      background: transparent;
+      border: 1px dashed #1a1a32;
+      pointer-events: none;
     }
 
     .hand-card-ap {
@@ -628,11 +657,12 @@
     .deck-close-btn:hover { color: #fff; }
 
     .deck-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 0.75rem;
       padding: 1rem 1.2rem 1.2rem;
       overflow-y: auto;
+      justify-content: flex-start;
     }
 
     .card {
@@ -644,7 +674,9 @@
       flex-direction: column;
       gap: 0.45rem;
       position: relative;
-      min-height: 110px;
+      width: 100px;
+      height: 150px;
+      flex-shrink: 0;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
     .card:hover {
@@ -779,7 +811,11 @@
         <div class="enemy-emoji-wrap" id="enemyEmoji">👹</div>
       </div>
 
-      <hr class="battle-divider" />
+      <div class="battle-mid">
+        <div class="combo-box">
+          <span class="combo-value" id="comboValue">X1.00</span>
+        </div>
+      </div>
 
       <!-- Bottom half: player -->
       <div class="battle-bottom">
@@ -983,7 +1019,12 @@
     const CARD_DEFS = {
       'Basic Block':  { ap: 1, desc: 'Play to add +5 block.' },
       'Basic Attack': { ap: 1, desc: 'Play to attack for 5.' },
+      'Rush':             { ap: 1, desc: 'Deal 3 × adrenaline damage.' },
+      'Timed Explosion':  { ap: 1, desc: 'Deal damage equal to current block.' },
     };
+
+    // Cards that can appear as rewards
+    const REWARD_POOL = Object.keys(CARD_DEFS);
 
     const playerDeck = [
       ...Array(5).fill('Basic Block'),
@@ -1178,14 +1219,15 @@
     let battleDiscard = [];                         // persistent discard pile
     let battleHand    = [];
     let isPlayerTurn  = true;
+    let comboMult     = 1.00;
 
     function drawHand() {
-      while (battleHand.length < 5) {
-        if (battleDeck.length === 0) {
-          if (battleDiscard.length === 0) break;
-          battleDeck    = shuffle([...battleDiscard]);
-          battleDiscard = [];
-        }
+      // If the deck alone can't fill a full hand, absorb the discard pile first
+      if (battleDeck.length < 5 && battleDiscard.length > 0) {
+        battleDeck    = shuffle([...battleDeck, ...battleDiscard]);
+        battleDiscard = [];
+      }
+      while (battleHand.length < 5 && battleDeck.length > 0) {
         battleHand.push(battleDeck.pop());
       }
     }
@@ -1213,6 +1255,9 @@
       // Block
       document.getElementById('blockVal').textContent = playerBlock;
 
+      // Combo
+      document.getElementById('comboValue').textContent = 'X' + comboMult.toFixed(2);
+
       // Hand
       renderHand();
     }
@@ -1224,6 +1269,7 @@
         return;
       }
       gs.innerHTML = `<div class="hand-grid">${battleHand.map((name, i) => {
+        if (name === null) return `<div class="hand-card hand-card-empty"></div>`;
         const def      = CARD_DEFS[name];
         const canPlay  = isPlayerTurn && def.ap <= battleAp;
         return `<div class="hand-card${canPlay ? '' : ' card-disabled'}" onclick="playCard(${i})">
@@ -1243,18 +1289,31 @@
       if (def.ap > battleAp) return;
 
       battleAp -= def.ap;
-      battleHand.splice(index, 1);
       battleDiscard.push(name);
+      battleHand[index] = null;
 
-      if (name === 'Basic Block')  playerBlock += 5;
-      if (name === 'Basic Attack') enemyHp = Math.max(0, enemyHp - 5);
+      if (name === 'Basic Block') playerBlock += 5;
+      if (name === 'Basic Attack') {
+        const dmg = 5;
+        enemyHp   = Math.max(0, enemyHp - dmg);
+        comboMult = Math.round((comboMult + 0.20 + dmg * 0.01) * 100) / 100;
+      }
+      if (name === 'Rush') {
+        const dmg = Math.floor(3 * comboMult);
+        enemyHp   = Math.max(0, enemyHp - dmg);
+        comboMult = Math.round((comboMult + 0.20 + dmg * 0.01) * 100) / 100;
+      }
+      if (name === 'Timed Explosion') {
+        const dmg = playerBlock;
+        enemyHp   = Math.max(0, enemyHp - dmg);
+      }
 
       renderBattleUI();
 
       if (enemyHp <= 0) {
         setTimeout(() => {
           // Flush hand + discard back into draw pile
-          battleDiscard.push(...battleHand);
+          battleDiscard.push(...battleHand.filter(c => c !== null));
           battleHand    = [];
           battleDeck    = shuffle([...battleDeck, ...battleDiscard]);
           battleDiscard = [];
@@ -1290,7 +1349,7 @@
 
         // Start player turn
         battleAp = BATTLE_MAX_AP;
-        battleDiscard.push(...battleHand);
+        battleDiscard.push(...battleHand.filter(c => c !== null));
         battleHand   = [];
         isPlayerTurn = true;
         document.getElementById('endTurnBtn').disabled = false;
@@ -1306,10 +1365,9 @@
       pendingGold = Math.floor(Math.random() * 21) + 10;  // 10-30
       document.getElementById('winGoldRow').textContent = `+ ${pendingGold} gold`;
 
-      // Pick 3 random cards from available types (repeats allowed)
-      const cardNames = Object.keys(CARD_DEFS);
-      const choices   = Array.from({ length: 3 }, () =>
-        cardNames[Math.floor(Math.random() * cardNames.length)]
+      // Pick 3 random cards from the reward pool (repeats allowed)
+      const choices = Array.from({ length: 3 }, () =>
+        REWARD_POOL[Math.floor(Math.random() * REWARD_POOL.length)]
       );
       document.getElementById('winCardChoices').innerHTML = choices.map(name => {
         const def = CARD_DEFS[name];
@@ -1349,6 +1407,7 @@
       battleAp     = BATTLE_MAX_AP;
       playerBlock  = 0;
       isPlayerTurn = true;
+      comboMult    = 1.00;
       battleHand   = [];
       drawHand();
 
