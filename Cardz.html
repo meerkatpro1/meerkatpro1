@@ -99,6 +99,23 @@
     }
     .map-menu-btn:hover { background: #22223e; border-color: #3b3b6a; color: #fff; }
 
+    .dev-tools-input {
+      background: #06060f;
+      border: 1px solid #181828;
+      border-radius: 5px;
+      color: #2a2a4a;
+      font-size: 0.72rem;
+      font-family: 'Courier New', monospace;
+      padding: 0.35rem 0.5rem;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .dev-tools-input:focus {
+      border-color: #2a2a5a;
+      color: #4a4a8a;
+    }
+
     .menu-hp-block {
       display: flex;
       flex-direction: column;
@@ -360,6 +377,7 @@
       border-radius: 5px;
       height: 18px;
       overflow: hidden;
+      position: relative;
     }
     .hp-fill {
       height: 100%;
@@ -368,6 +386,15 @@
     }
     .hp-fill.enemy  { background: linear-gradient(90deg, #8b0000, #e94560); }
     .hp-fill.player { background: linear-gradient(90deg, #145214, #4caf50); }
+    .hp-fill.enemy-block {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      background: rgba(59, 130, 246, 0.5);
+      border-radius: 5px;
+      transition: width 0.35s ease;
+      pointer-events: none;
+    }
 
     .battle-mid {
       display: flex;
@@ -411,6 +438,22 @@
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
+    }
+
+    .debuff-row {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      min-height: 1.2rem;
+    }
+    .debuff-tag {
+      background: #1a0a1a;
+      border: 1px solid #6a2a6a;
+      border-radius: 4px;
+      color: #c080c0;
+      font-size: 0.68rem;
+      padding: 0.15rem 0.45rem;
+      font-family: 'Courier New', monospace;
     }
 
     .battle-main-row {
@@ -487,7 +530,7 @@
       background: #0e0e22;
       border: 1px solid #2a2a4a;
       border-radius: 8px;
-      padding: 0.5rem 0.4rem 0.6rem;
+      padding: 0.5rem 0.25rem 0.6rem;
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
@@ -539,11 +582,12 @@
     }
 
     .hand-card-desc {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       color: #668;
       text-align: center;
       line-height: 1.35;
       margin-top: auto;
+      padding: 0 0.1rem;
     }
 
     /* Block display */
@@ -600,6 +644,256 @@
     }
     .end-turn-btn:hover { background: #2563eb; border-color: #3b82f6; color: #fff; }
 
+
+    /* ── Shop screen ────────────────────────────────────────────────────────── */
+    .shop-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0d0d1a;
+      z-index: 50;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem 3rem;
+    }
+    .shop-overlay.hidden { display: none; }
+
+    .shop-content {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .shop-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .shop-title { color: #fff; font-size: 1.5rem; font-weight: 700; }
+    .shop-close-btn {
+      background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 6px;
+      color: #aab; font-size: 0.82rem; padding: 0.45rem 0.9rem; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .shop-close-btn:hover { background: #22223e; color: #fff; }
+
+    .shop-podium {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .podium-display {
+      width: 200px;
+      height: 130px;
+      background: #111126;
+      border: 2px solid #2a2a5a;
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2a2a4a;
+      font-size: 0.72rem;
+    }
+    .podium-base {
+      width: 260px;
+      height: 18px;
+      background: linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%);
+      border-radius: 0 0 10px 10px;
+      border: 2px solid #2a2a5a;
+      border-top: none;
+    }
+
+    .shop-section-label {
+      color: #445;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+    }
+
+    .shop-card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+    }
+
+    .shop-card {
+      background: #0e0e22;
+      border: 1px solid #2a2a4a;
+      border-radius: 10px;
+      padding: 0.6rem 0.3rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      position: relative;
+      cursor: pointer;
+      aspect-ratio: 2 / 3;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .shop-card:hover:not(.sold):not(.broke) {
+      border-color: #ffd700;
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.18);
+    }
+    .shop-card.sold  { opacity: 0.35; cursor: not-allowed; }
+    .shop-card.broke { opacity: 0.5;  cursor: not-allowed; }
+
+    .shop-card-ap {
+      position: absolute; top: 0.35rem; left: 0.4rem;
+      width: 18px; height: 18px;
+      background: #1a4fa8; border: 1px solid #2563eb; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 800; color: #fff;
+      font-family: 'Courier New', monospace;
+    }
+    .shop-card-name {
+      font-size: 0.75rem; font-weight: 700; color: #dde;
+      text-align: center; margin-top: 1.4rem; line-height: 1.2;
+    }
+    .shop-card-hr { border: none; border-top: 1px solid #1e1e3a; margin: 0.2rem 0; }
+    .shop-card-desc {
+      font-size: 0.58rem; color: #668; text-align: center;
+      line-height: 1.35; flex: 1; padding: 0 0.1rem;
+    }
+    .shop-card-price {
+      background: #1a1500; border: 1px solid #4a3a00; border-radius: 5px;
+      color: #ffd700; font-size: 0.72rem; font-weight: 700;
+      text-align: center; padding: 0.2rem 0;
+      font-family: 'Courier New', monospace;
+      margin-top: auto;
+    }
+    .shop-card.sold  .shop-card-price { background: #0e0e1a; border-color: #2a2a4a; color: #334; }
+    .shop-card.broke .shop-card-price { color: #a84040; border-color: #4a2020; background: #120808; }
+
+    /* ── Artifact screen ────────────────────────────────────────────────────── */
+    .artifact-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0d0d1a;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .artifact-overlay.hidden { display: none; }
+
+    .artifact-content {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .artifact-title {
+      color: #ff5050;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    .artifact-podiums {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .artifact-podium {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .artifact-podium:hover .artifact-display {
+      border-color: #ff5050;
+      box-shadow: 0 0 18px rgba(255, 80, 80, 0.2);
+    }
+
+    .artifact-display {
+      width: 150px;
+      height: 190px;
+      background: #111126;
+      border: 2px solid #2a2a5a;
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .artifact-base {
+      width: 180px;
+      height: 22px;
+      background: linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%);
+      border: 2px solid #2a2a5a;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .artifact-footer {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .artifact-skip-btn {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      color: #aab;
+      font-size: 0.82rem;
+      padding: 0.5rem 1.1rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .artifact-skip-btn:hover { background: #22223e; color: #fff; }
+
+    .artifact-hover-desc {
+      min-height: 2.5rem;
+      text-align: center;
+      color: #889;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      padding: 0 1rem;
+      max-width: 480px;
+    }
+
+    .artifact-display-icon {
+      font-size: 2.8rem;
+      line-height: 1;
+    }
+
+    /* ── Menu artifact column ───────────────────────────────────────────────── */
+    .menu-artifacts-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .menu-artifacts-title {
+      font-size: 0.62rem;
+      color: #445;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+    .menu-artifact-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .menu-artifact-icon { font-size: 1.1rem; line-height: 1; }
+    .menu-artifact-name { font-size: 0.65rem; color: #778; }
 
     /* ── Deck viewer modal ──────────────────────────────────────────────────── */
     .deck-overlay {
@@ -669,7 +963,7 @@
       background: #0e0e22;
       border: 1px solid #2a2a4a;
       border-radius: 9px;
-      padding: 0.65rem 0.7rem 0.75rem;
+      padding: 0.65rem 0.4rem 0.75rem;
       display: flex;
       flex-direction: column;
       gap: 0.45rem;
@@ -717,10 +1011,11 @@
     }
 
     .card-desc {
-      font-size: 0.72rem;
+      font-size: 0.65rem;
       color: #778;
       text-align: center;
       line-height: 1.45;
+      padding: 0 0.15rem;
     }
   </style>
 </head>
@@ -757,12 +1052,19 @@
           <span class="menu-gold-value" id="menuGoldValue">🪙 0</span>
         </div>
         <button class="map-menu-btn" onclick="openDeck()">Deck</button>
+        <div class="menu-artifacts-section" id="menuArtifactsSection" style="display:none">
+          <div class="menu-artifacts-title">Artifacts</div>
+          <div id="menuArtifactsList"></div>
+        </div>
+        <!-- dev tools box -->
+        <input id="devToolsInput" class="dev-tools-input" type="text"
+               placeholder="..." autocomplete="off"
+               onkeydown="handleDevTools(event)" />
       </div>
     </div>
 
     <div class="controls">
       <div id="pathDisplay" class="path-display"></div>
-      <button class="reset-btn" onclick="resetGame()">Reset</button>
     </div>
   </div>
 
@@ -789,6 +1091,59 @@
     </div>
   </div>
 
+  <!-- ── Artifact screen overlay ──────────────────────────────────────────── -->
+  <div id="artifactScreen" class="artifact-overlay hidden">
+    <div class="artifact-content">
+
+      <div class="artifact-title">Choose an Artifact</div>
+
+      <div class="artifact-podiums">
+        <div class="artifact-podium" onclick="chooseArtifact(0)"
+             onmouseover="showArtifactDesc(0)" onmouseout="clearArtifactDesc()">
+          <div class="artifact-display" id="artifactDisplay0"></div>
+          <div class="artifact-base"></div>
+        </div>
+        <div class="artifact-podium" onclick="chooseArtifact(1)"
+             onmouseover="showArtifactDesc(1)" onmouseout="clearArtifactDesc()">
+          <div class="artifact-display" id="artifactDisplay1"></div>
+          <div class="artifact-base"></div>
+        </div>
+        <div class="artifact-podium" onclick="chooseArtifact(2)"
+             onmouseover="showArtifactDesc(2)" onmouseout="clearArtifactDesc()">
+          <div class="artifact-display" id="artifactDisplay2"></div>
+          <div class="artifact-base"></div>
+        </div>
+      </div>
+
+      <div id="artifactHoverDesc" class="artifact-hover-desc"></div>
+
+    </div>
+
+    <div class="artifact-footer">
+      <button class="artifact-skip-btn" onclick="closeArtifacts()">Skip</button>
+    </div>
+  </div>
+
+  <!-- ── Shop screen overlay ──────────────────────────────────────────────── -->
+  <div id="shopScreen" class="shop-overlay hidden">
+    <div class="shop-content">
+
+      <div class="shop-header">
+        <span class="shop-title">Shop</span>
+        <button class="shop-close-btn" onclick="closeShop()">✕ Leave</button>
+      </div>
+
+      <div class="shop-podium">
+        <div class="podium-display" id="podiumDisplay"></div>
+        <div class="podium-base"></div>
+      </div>
+
+      <div class="shop-section-label">Cards for Sale</div>
+      <div class="shop-card-grid" id="shopCardGrid"></div>
+
+    </div>
+  </div>
+
   <!-- ── Battle screen overlay ────────────────────────────────────────────── -->
   <div id="battleScreen" class="battle-overlay hidden">
     <div class="battle-content">
@@ -806,6 +1161,7 @@
           </div>
           <div class="hp-track">
             <div class="hp-fill enemy" id="enemyHpFill" style="width:100%"></div>
+            <div class="hp-fill enemy-block" id="enemyBlockFill" style="width:0%"></div>
           </div>
         </div>
         <div class="enemy-emoji-wrap" id="enemyEmoji">👹</div>
@@ -828,6 +1184,8 @@
             <div class="hp-fill player" id="playerHpFill" style="width:100%"></div>
           </div>
         </div>
+
+        <div id="debuffRow" class="debuff-row"></div>
 
         <div class="battle-main-row">
           <div class="ap-counter">
@@ -1021,6 +1379,11 @@
       'Basic Attack': { ap: 1, desc: 'Play to attack for 5.' },
       'Rush':             { ap: 1, desc: 'Deal 3 × adrenaline damage.' },
       'Timed Explosion':  { ap: 1, desc: 'Deal damage equal to current block.' },
+      'Tower Shield':     { ap: 2, desc: 'Immediately gain +20 block.' },
+      'Mirror':           { ap: 1, desc: 'Reflect the damage last dealt to you back at the enemy.' },
+      'Wild Swipes':      { ap: 1, desc: 'Attack twice, dealing 7 damage per hit.' },
+      'Rage':             { ap: 1, desc: 'Deal 7 damage. Deals 14 instead at X4.00+ adrenaline.' },
+      'Heavy Hit':        { ap: 1, desc: 'Deal 8 damage.' },
     };
 
     // Cards that can appear as rewards
@@ -1203,9 +1566,28 @@
 
     // ── Battle screen ─────────────────────────────────────────────────────────
     const ENEMY_ROSTER = [
-      { name: 'Goblin',   emoji: '👺', hp: 40,  info: '' },
-      { name: 'Skeleton', emoji: '💀', hp: 35, info: '' },
-      { name: 'Slime',    emoji: '🟢', hp: 23, info: '' },
+      {
+        name: 'Goblin', emoji: '👺', hp: 40,
+        moves: [
+          { weight: 60, intent: 'Attacks 3× (3 each)', id: 'triple_strike' },
+          { weight: 25, intent: 'Guards +5 / Hits 5',  id: 'guard_strike'  },
+          { weight: 15, intent: 'Attacks 2× (6 each)', id: 'double_heavy'  },
+        ]
+      },
+      {
+        name: 'Skeleton', emoji: '💀', hp: 70,
+        moves: [
+          { weight: 100, intent: '', id: 'fib_strike' },
+        ]
+      },
+      {
+        name: 'Slime', emoji: '🟢', hp: 41,
+        moves: [
+          { weight: 40, intent: 'Shield +12 / Hit 3', id: 'slime_shield' },
+          { weight: 35, intent: '',                    id: 'slime_regen'  },
+          { weight: 25, intent: 'Casts Fumble (3t)',   id: 'slime_debuff' },
+        ]
+      },
     ];
 
     const BATTLE_MAX_AP = 3;
@@ -1213,6 +1595,12 @@
     let battleEnemy   = null;
     let enemyHp       = 0;
     let enemyMaxHp    = 0;
+    let enemyBlock     = 0;
+    let enemyNextMove  = null;
+    let skeletonFibIdx       = 0;
+    let playerMissDebuffTurns = 0;
+    let lastEnemyDamage       = 0;
+    const FIB = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377];
     let battleAp      = BATTLE_MAX_AP;
     let playerBlock   = 0;
     let battleDeck    = shuffle([...playerDeck]);  // persistent draw pile
@@ -1220,6 +1608,68 @@
     let battleHand    = [];
     let isPlayerTurn  = true;
     let comboMult     = 1.00;
+
+    function pickEnemyMove() {
+      const moves = battleEnemy.moves;
+      const total = moves.reduce((s, m) => s + m.weight, 0);
+      let r = Math.random() * total;
+      for (const move of moves) {
+        r -= move.weight;
+        if (r <= 0) { enemyNextMove = resolveIntent(move); return; }
+      }
+      enemyNextMove = resolveIntent(moves[moves.length - 1]);
+    }
+
+    function resolveIntent(move) {
+      if (move.id === 'fib_strike') {
+        const dmg = FIB[Math.min(skeletonFibIdx, FIB.length - 1)];
+        return { ...move, intent: `Fibonacci Strike (${dmg} dmg)` };
+      }
+      if (move.id === 'slime_regen') {
+        const block = enemyMaxHp - enemyHp;
+        return { ...move, intent: `Regen +${block} block / Hit 5` };
+      }
+      return move;
+    }
+
+    function dealToPlayer(dmg) {
+      const absorbed   = Math.min(playerBlock, dmg);
+      playerBlock      = Math.max(0, playerBlock - absorbed);
+      const net        = dmg - absorbed;
+      lastEnemyDamage += net;
+      setPlayerHp(playerHp - net);
+      document.getElementById('blockVal').textContent = playerBlock;
+    }
+
+    function dealToEnemy(dmg) {
+      if (dmg > 0 && playerMissDebuffTurns > 0 && Math.random() < 0.10) return; // miss
+      const absorbed = Math.min(enemyBlock, dmg);
+      enemyBlock     = Math.max(0, enemyBlock - absorbed);
+      const net      = dmg - absorbed;
+      enemyHp        = Math.max(0, enemyHp - net);
+      if (net > 0) {
+        let gain = 0.20 + net * 0.01;
+        if (hasArtifact('Amulet')) gain *= 1.2;
+        comboMult = Math.round((comboMult + gain) * 100) / 100;
+      }
+    }
+
+    function executeEnemyMove(move) {
+      switch (move.id) {
+        case 'triple_strike': dealToPlayer(3); dealToPlayer(3); dealToPlayer(3); break;
+        case 'guard_strike':  enemyBlock += 5; dealToPlayer(5);                  break;
+        case 'double_heavy':  dealToPlayer(6); dealToPlayer(6);                  break;
+        case 'fib_strike': {
+          const dmg = FIB[Math.min(skeletonFibIdx, FIB.length - 1)];
+          dealToPlayer(dmg);
+          skeletonFibIdx++;
+          break;
+        }
+        case 'slime_shield': enemyBlock += 12; dealToPlayer(3);                              break;
+        case 'slime_regen':  enemyBlock += (enemyMaxHp - enemyHp); dealToPlayer(5);         break;
+        case 'slime_debuff': playerMissDebuffTurns = 3;                                      break;
+      }
+    }
 
     function drawHand() {
       // If the deck alone can't fill a full hand, absorb the discard pile first
@@ -1240,10 +1690,16 @@
     }
 
     function renderBattleUI() {
-      // Enemy HP
-      const ePct = (enemyHp / enemyMaxHp * 100).toFixed(1) + '%';
-      document.getElementById('enemyHpText').textContent = `${enemyHp} / ${enemyMaxHp}`;
-      document.getElementById('enemyHpFill').style.width = ePct;
+      // Enemy HP + block overlay
+      const ePct  = (enemyHp    / enemyMaxHp * 100).toFixed(1) + '%';
+      const ebPct = Math.min(100, enemyBlock / enemyMaxHp * 100).toFixed(1) + '%';
+      document.getElementById('enemyHpText').textContent    = `${enemyHp} / ${enemyMaxHp}`;
+      document.getElementById('enemyHpFill').style.width    = ePct;
+      document.getElementById('enemyBlockFill').style.width = ebPct;
+
+      // Enemy intent
+      document.getElementById('battleInfo').textContent =
+        enemyNextMove ? `Intent:\n${enemyNextMove.intent}` : '';
 
       // Player HP (setPlayerHp syncs both bars)
       setPlayerHp(playerHp);
@@ -1254,6 +1710,11 @@
 
       // Block
       document.getElementById('blockVal').textContent = playerBlock;
+
+      // Debuffs
+      const debuffRow = document.getElementById('debuffRow');
+      debuffRow.innerHTML = playerMissDebuffTurns > 0
+        ? `<span class="debuff-tag">Fumble — ${playerMissDebuffTurns}t (10% miss)</span>` : '';
 
       // Combo
       document.getElementById('comboValue').textContent = 'X' + comboMult.toFixed(2);
@@ -1276,7 +1737,7 @@
           <div class="hand-card-ap">${def.ap}</div>
           <div class="hand-card-name">${name}</div>
           <hr class="hand-card-hr" />
-          <div class="hand-card-desc">${def.desc}</div>
+          <div class="hand-card-desc">${cardDesc(name)}</div>
         </div>`;
       }).join('')}</div>`;
     }
@@ -1292,21 +1753,15 @@
       battleDiscard.push(name);
       battleHand[index] = null;
 
-      if (name === 'Basic Block') playerBlock += 5;
-      if (name === 'Basic Attack') {
-        const dmg = 5;
-        enemyHp   = Math.max(0, enemyHp - dmg);
-        comboMult = Math.round((comboMult + 0.20 + dmg * 0.01) * 100) / 100;
-      }
-      if (name === 'Rush') {
-        const dmg = Math.floor(3 * comboMult);
-        enemyHp   = Math.max(0, enemyHp - dmg);
-        comboMult = Math.round((comboMult + 0.20 + dmg * 0.01) * 100) / 100;
-      }
-      if (name === 'Timed Explosion') {
-        const dmg = playerBlock;
-        enemyHp   = Math.max(0, enemyHp - dmg);
-      }
+      if (name === 'Basic Block')     { playerBlock += 5  + blockBonus(); }
+      if (name === 'Basic Attack')    { dealToEnemy(applyDice(5)); }
+      if (name === 'Rush')            { dealToEnemy(applyDice(Math.floor(3 * comboMult))); }
+      if (name === 'Timed Explosion') { dealToEnemy(applyDice(playerBlock)); }
+      if (name === 'Tower Shield')    { playerBlock += 20 + blockBonus(); }
+      if (name === 'Mirror')          { dealToEnemy(applyDice(lastEnemyDamage)); }
+      if (name === 'Wild Swipes')     { dealToEnemy(applyDice(7)); dealToEnemy(applyDice(7)); }
+      if (name === 'Rage')            { dealToEnemy(applyDice(comboMult >= 4 ? 14 : 7)); }
+      if (name === 'Heavy Hit')       { dealToEnemy(applyDice(8)); }
 
       renderBattleUI();
 
@@ -1329,10 +1784,13 @@
 
       // Enemy attacks after a short pause
       setTimeout(() => {
-        const raw      = 10;
-        const absorbed = Math.min(playerBlock, raw);
-        playerBlock    = 0;
-        setPlayerHp(playerHp - (raw - absorbed));
+        // Enemy block resets at the start of the enemy's turn
+        enemyBlock      = 0;
+        lastEnemyDamage = 0;
+
+        // Execute the pre-chosen move
+        if (enemyNextMove) executeEnemyMove(enemyNextMove);
+        playerBlock = 0;
 
         // Flash the battle screen red briefly
         const bs = document.getElementById('battleScreen');
@@ -1342,10 +1800,16 @@
         if (playerHp <= 0) {
           setTimeout(() => {
             closeBattle();
-            resetGame();
+            if (battleNodeId !== null) resetGame();
           }, 400);
           return;
         }
+
+        // Pick next move before player's turn so intent is visible
+        pickEnemyMove();
+
+        // Tick down debuffs
+        if (playerMissDebuffTurns > 0) playerMissDebuffTurns--;
 
         // Start player turn
         battleAp = BATTLE_MAX_AP;
@@ -1404,16 +1868,20 @@
       battleEnemy   = ENEMY_ROSTER[Math.floor(Math.random() * ENEMY_ROSTER.length)];
       enemyHp       = battleEnemy.hp;
       enemyMaxHp    = battleEnemy.hp;
-      battleAp     = BATTLE_MAX_AP;
-      playerBlock  = 0;
-      isPlayerTurn = true;
-      comboMult    = 1.00;
-      battleHand   = [];
+      enemyBlock            = 0;
+      skeletonFibIdx        = 0;
+      playerMissDebuffTurns = 0;
+      lastEnemyDamage       = 0;
+      battleAp              = BATTLE_MAX_AP;
+      playerBlock   = 0;
+      isPlayerTurn  = true;
+      comboMult     = 1.00;
+      battleHand    = [];
+      pickEnemyMove();
       drawHand();
 
       document.getElementById('enemyName').textContent  = battleEnemy.name;
       document.getElementById('enemyEmoji').textContent = battleEnemy.emoji;
-      document.getElementById('battleInfo').textContent = battleEnemy.info;
       document.getElementById('endTurnBtn').disabled    = false;
 
       renderBattleUI();
@@ -1426,6 +1894,160 @@
     }
 
     // ── Interaction ───────────────────────────────────────────────────────────
+    // ── Artifacts ─────────────────────────────────────────────────────────────
+    const ARTIFACT_DEFS = {
+      'Amulet': {
+        icon: '📿',
+        desc: 'Passive: All adrenaline gains are increased by 20%.',
+      },
+      'Shield': {
+        icon: '🛡️',
+        desc: 'Passive: All block cards grant +2 additional block.',
+      },
+      'Dice': {
+        icon: '🎲',
+        desc: 'Passive: All attacks deal a random ±3 bonus damage.',
+      },
+    };
+
+    let playerArtifacts = [];
+    let artifactChoices = [];
+
+    function hasArtifact(name) { return playerArtifacts.includes(name); }
+
+    function blockBonus()   { return hasArtifact('Shield') ? 2 : 0; }
+
+    function applyDice(dmg) {
+      return hasArtifact('Dice') ? Math.max(0, dmg + Math.floor(Math.random() * 7) - 3) : dmg;
+    }
+
+    function cardDesc(name) {
+      const def = CARD_DEFS[name];
+      if (!hasArtifact('Shield')) return def.desc;
+      if (name === 'Basic Block')  return `Play to add +${5  + blockBonus()} block.`;
+      if (name === 'Tower Shield') return `Immediately gain +${20 + blockBonus()} block.`;
+      return def.desc;
+    }
+
+    function updateMenuArtifacts() {
+      const section = document.getElementById('menuArtifactsSection');
+      const list    = document.getElementById('menuArtifactsList');
+      if (playerArtifacts.length === 0) { section.style.display = 'none'; return; }
+      section.style.display = 'flex';
+      list.innerHTML = playerArtifacts.map(name => {
+        const def = ARTIFACT_DEFS[name];
+        return `<div class="menu-artifact-row">
+          <span class="menu-artifact-icon">${def.icon}</span>
+          <span class="menu-artifact-name">${name}</span>
+        </div>`;
+      }).join('');
+    }
+
+    function openArtifacts() {
+      artifactChoices = shuffle(Object.keys(ARTIFACT_DEFS)).slice(0, 3);
+      artifactChoices.forEach((name, i) => {
+        const el = document.getElementById(`artifactDisplay${i}`);
+        el.innerHTML = `<span class="artifact-display-icon">${ARTIFACT_DEFS[name].icon}</span>`;
+      });
+      document.getElementById('artifactHoverDesc').textContent = '';
+      document.getElementById('artifactScreen').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function closeArtifacts() {
+      document.getElementById('artifactScreen').classList.add('hidden');
+    }
+
+    function chooseArtifact(index) {
+      const name = artifactChoices[index];
+      if (name && !hasArtifact(name)) playerArtifacts.push(name);
+      updateMenuArtifacts();
+      closeArtifacts();
+    }
+
+    function showArtifactDesc(index) {
+      const name = artifactChoices[index];
+      if (!name) return;
+      document.getElementById('artifactHoverDesc').textContent =
+        `${ARTIFACT_DEFS[name].icon}  ${name} — ${ARTIFACT_DEFS[name].desc}`;
+    }
+
+    function clearArtifactDesc() {
+      document.getElementById('artifactHoverDesc').textContent = '';
+    }
+
+    // ── Shop ──────────────────────────────────────────────────────────────────
+    let shopCards = [];
+
+    function generateShop() {
+      shopCards = Array.from({ length: 9 }, () => ({
+        name:  REWARD_POOL[Math.floor(Math.random() * REWARD_POOL.length)],
+        price: Math.floor(Math.random() * 21) + 30,
+        sold:  false,
+      }));
+    }
+
+    function renderShopCards() {
+      document.getElementById('shopCardGrid').innerHTML = shopCards.map((item, i) => {
+        const def      = CARD_DEFS[item.name];
+        const canAfford = !item.sold && playerGold >= item.price;
+        const cls      = item.sold ? 'sold' : playerGold < item.price ? 'broke' : '';
+        return `<div class="shop-card ${cls}" onclick="buyShopCard(${i})">
+          <div class="shop-card-ap">${def.ap}</div>
+          <div class="shop-card-name">${item.name}</div>
+          <hr class="shop-card-hr" />
+          <div class="shop-card-desc">${cardDesc(item.name)}</div>
+          <div class="shop-card-price">${item.sold ? 'Sold' : '🪙 ' + item.price}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function openShop() {
+      generateShop();
+      renderShopCards();
+      document.getElementById('shopScreen').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function closeShop() {
+      document.getElementById('shopScreen').classList.add('hidden');
+    }
+
+    function buyShopCard(index) {
+      const item = shopCards[index];
+      if (item.sold || playerGold < item.price) return;
+      setGold(playerGold - item.price);
+      item.sold = true;
+      playerDeck.push(item.name);
+      battleDiscard.push(item.name);
+      renderShopCards();
+    }
+
+    // ── Dev tools box ─────────────────────────────────────────────────────────
+    function handleDevTools(e) {
+      if (e.key !== 'Enter') return;
+      const input = document.getElementById('devToolsInput');
+      const cmd   = input.value.trim();
+      input.value = '';
+
+      if (cmd === 'add.all') {
+        for (const name of Object.keys(CARD_DEFS)) {
+          playerDeck.push(name);
+          battleDiscard.push(name);
+        }
+      } else if (cmd === 'Rich.man') {
+        setGold(playerGold + 1000);
+      } else if (cmd === 'commit.reset') {
+        resetGame();
+      } else if (cmd === 'example.fight') {
+        openBattle(null);
+      } else if (cmd === 'example.shop') {
+        openShop();
+      } else if (cmd === 'example.artifact') {
+        openArtifacts();
+      }
+    }
+
     function handleClick(id) {
       if (won || !available.has(id)) return;
 
@@ -1444,6 +2066,18 @@
         render();
         updatePathDisplay();
         openBattle(id);
+      } else if (NODES[id].letter === 'S') {
+        available = new Set(OUT[id]);
+        setStatus('Visiting the shop…', '#ffd700');
+        render();
+        updatePathDisplay();
+        openShop();
+      } else if (NODES[id].letter === 'X') {
+        available = new Set(OUT[id]);
+        setStatus('Choose an artifact…', '#ff5050');
+        render();
+        updatePathDisplay();
+        openArtifacts();
       } else {
         available = new Set(OUT[id]);
         setStatus(pathArr.length === 1 ? 'Now choose where to go next' : 'Keep climbing…', '#4caf50');
@@ -1467,6 +2101,8 @@
       // Reset player state
       setPlayerHp(PLAYER_MAX_HP);
       setGold(0);
+      playerArtifacts = [];
+      updateMenuArtifacts();
       playerDeck.splice(0, playerDeck.length, ...DEFAULT_DECK);
       battleDeck    = shuffle([...DEFAULT_DECK]);
       battleDiscard = [];
