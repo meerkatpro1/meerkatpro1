@@ -2045,6 +2045,9 @@
         openShop();
       } else if (cmd === 'example.artifact') {
         openArtifacts();
+      } else if (cmd === 'Lets.go.gambling') {
+        if (!hasArtifact('Dice')) playerArtifacts.push('Dice');
+        updateMenuArtifacts();
       }
     }
 
