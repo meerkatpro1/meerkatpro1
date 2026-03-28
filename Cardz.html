@@ -9,13 +9,13 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #0d0d1a;
-      color: #ccc;
+      background: #0e1c30;
+      color: #d4e4f4;
       min-height: 100vh;
     }
 
     nav {
-      background: #1a1a2e;
+      background: #1c2e4a;
       padding: 0 2rem;
       display: flex;
       align-items: center;
@@ -52,9 +52,9 @@
     .board-wrap {
       flex: 1;
       min-width: 0;
-      background: #06060f;
-      border: 2px solid #16163a;
-      border-radius: 12px;
+      background: #0a1525;
+      border: 2px solid #1a2e48;
+      border-radius: 0;
       overflow: hidden;
     }
     #board { width: 100%; height: auto; display: block; }
@@ -66,9 +66,9 @@
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
-      background: #111126;
-      border: 1px solid #1e1e3a;
-      border-radius: 10px;
+      background: #13223a;
+      border: 1px solid #1e2e48;
+      border-radius: 0;
       padding: 0.9rem 0.75rem;
       position: sticky;
       top: 72px;   /* below nav */
@@ -81,13 +81,13 @@
       text-transform: uppercase;
       text-align: center;
       padding-bottom: 0.4rem;
-      border-bottom: 1px solid #1e1e3a;
+      border-bottom: 1px solid #1e2e48;
     }
 
     .map-menu-btn {
-      background: #1a1a2e;
-      border: 1px solid #2a2a4a;
-      border-radius: 6px;
+      background: #1c2e4a;
+      border: 1px solid #284060;
+      border-radius: 0;
       color: #aab;
       font-size: 0.82rem;
       font-weight: 600;
@@ -97,13 +97,13 @@
       width: 100%;
       text-align: center;
     }
-    .map-menu-btn:hover { background: #22223e; border-color: #3b3b6a; color: #fff; }
+    .map-menu-btn:hover { background: #1e3254; border-color: #3b3b6a; color: #fff; }
 
     .dev-tools-input {
-      background: #06060f;
+      background: #0a1525;
       border: 1px solid #181828;
-      border-radius: 5px;
-      color: #2a2a4a;
+      border-radius: 0;
+      color: #284060;
       font-size: 0.72rem;
       font-family: 'Courier New', monospace;
       padding: 0.35rem 0.5rem;
@@ -121,9 +121,9 @@
       flex-direction: column;
       gap: 0.3rem;
       padding: 0.55rem 0.5rem;
-      background: #0e0e22;
-      border: 1px solid #1e1e3a;
-      border-radius: 7px;
+      background: #152238;
+      border: 1px solid #1e2e48;
+      border-radius: 0;
     }
     .menu-hp-label {
       display: flex;
@@ -143,16 +143,16 @@
       font-family: 'Courier New', monospace;
     }
     .menu-hp-track {
-      background: #0c0c20;
-      border: 1px solid #1e1e3a;
-      border-radius: 4px;
+      background: #0c1a30;
+      border: 1px solid #1e2e48;
+      border-radius: 0;
       height: 7px;
       overflow: hidden;
     }
     .menu-hp-fill {
       height: 100%;
       background: linear-gradient(90deg, #145214, #4caf50);
-      border-radius: 4px;
+      border-radius: 0;
       transition: width 0.35s ease;
     }
 
@@ -161,9 +161,9 @@
       align-items: center;
       justify-content: space-between;
       padding: 0.45rem 0.5rem;
-      background: #0e0e22;
-      border: 1px solid #1e1e3a;
-      border-radius: 7px;
+      background: #152238;
+      border: 1px solid #1e2e48;
+      border-radius: 0;
     }
     .menu-gold-title {
       font-size: 0.62rem;
@@ -192,9 +192,9 @@
     .win-overlay.hidden { display: none; }
 
     .win-modal {
-      background: #111126;
-      border: 1px solid #2a2a4a;
-      border-radius: 14px;
+      background: #13223a;
+      border: 1px solid #284060;
+      border-radius: 0;
       width: 100%;
       max-width: 520px;
       display: flex;
@@ -241,14 +241,13 @@
     }
     .win-card-choices .card:hover {
       border-color: #ffd700;
-      box-shadow: 0 0 14px rgba(255, 215, 0, 0.3);
     }
 
     .win-skip-btn {
       align-self: center;
       background: none;
-      border: 1px solid #2a2a4a;
-      border-radius: 6px;
+      border: 1px solid #284060;
+      border-radius: 0;
       color: #556;
       font-size: 0.8rem;
       padding: 0.45rem 1.4rem;
@@ -279,11 +278,11 @@
     .path-chip.S    { background: #180828; color: #b060ff; border: 1px solid #4a1880; }
     .path-chip.X    { background: #220606; color: #ff5050; border: 1px solid #661212; }
     .path-chip.BOSS { background: #221800; color: #ffd700; border: 1px solid #665000;
-                      border-radius: 7px; min-width: 46px; font-size: 0.72rem; }
+                      border-radius: 0; min-width: 46px; font-size: 0.72rem; }
     .path-sep { color: #222240; font-size: 0.85rem; }
 
     .reset-btn {
-      background: #2a1a1a; border: 2px solid #4a2a2a; border-radius: 6px;
+      background: #2a1a1a; border: 2px solid #4a2a2a; border-radius: 0;
       color: #e94560; font-size: 0.82rem; padding: 0.45rem 1rem;
       cursor: pointer; white-space: nowrap; transition: background 0.15s; flex-shrink: 0;
     }
@@ -293,22 +292,22 @@
     .battle-overlay {
       position: fixed;
       inset: 0;
-      background: #0d0d1a;
+      background: #0e1c30;
       z-index: 50;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1rem 1rem 1.5rem;
+      padding: 0.4rem 3rem 2rem;
       overflow-y: auto;
     }
     .battle-overlay.hidden { display: none; }
 
     .battle-content {
       width: 100%;
-      max-width: 640px;
+      max-width: 1100px;
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 1rem;
       flex: 1;
     }
 
@@ -318,15 +317,15 @@
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 0.6rem 0;
+      padding: 0.2rem 0 0;
     }
 
     .enemy-info-box {
-      width: 150px;
+      width: 200px;
       min-height: 110px;
-      background: #1a1a2e;
-      border: 1px solid #2a2a4a;
-      border-radius: 8px;
+      background: #1c2e4a;
+      border: 1px solid #284060;
+      border-radius: 0;
       padding: 0.7rem 0.8rem;
       flex-shrink: 0;
       display: flex;
@@ -356,8 +355,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 72px;
-      font-size: 2.8rem;
+      width: 110px;
+      font-size: 4.5rem;
       flex-shrink: 0;
       line-height: 1;
     }
@@ -372,26 +371,26 @@
       justify-content: space-between;
     }
     .hp-track {
-      background: #0c0c20;
-      border: 1px solid #1e1e3a;
-      border-radius: 5px;
-      height: 18px;
+      background: #0c1a30;
+      border: 1px solid #1e2e48;
+      border-radius: 0;
+      height: 26px;
       overflow: hidden;
       position: relative;
     }
     .hp-fill {
       height: 100%;
-      border-radius: 5px;
+      border-radius: 0;
       transition: width 0.35s ease;
     }
-    .hp-fill.enemy  { background: linear-gradient(90deg, #8b0000, #e94560); }
-    .hp-fill.player { background: linear-gradient(90deg, #145214, #4caf50); }
+    .hp-fill.enemy  { background: #e94560; }
+    .hp-fill.player { background: #4caf50; }
     .hp-fill.enemy-block {
       position: absolute;
       top: 0; left: 0;
       height: 100%;
       background: rgba(59, 130, 246, 0.5);
-      border-radius: 5px;
+      border-radius: 0;
       transition: width 0.35s ease;
       pointer-events: none;
     }
@@ -399,31 +398,42 @@
     .battle-mid {
       display: flex;
       align-items: center;
-      gap: 0.8rem;
+      justify-content: space-between;
       flex-shrink: 0;
-      padding: 0.1rem 0;
-    }
-    .battle-mid::before, .battle-mid::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #1e1e3a;
+      padding: 0.4rem 0;
     }
     .combo-box {
       background: #1a0a00;
       border: 2px solid #ff8c00;
-      border-radius: 7px;
-      padding: 0.25rem 0.75rem;
+      border-radius: 0;
+      padding: 0.5rem 1.2rem;
       display: flex;
       align-items: center;
-      box-shadow: 0 0 8px rgba(255,140,0,0.25);
     }
     .combo-value {
       font-family: 'Courier New', monospace;
-      font-size: 1rem;
+      font-size: 1.6rem;
       font-weight: 800;
       color: #ff8c00;
       letter-spacing: 0.04em;
+    }
+    .mid-block-display {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #060e1f;
+      border: 2px solid #1e4a8a;
+      border-radius: 0;
+      padding: 0.5rem 1.2rem;
+    }
+    .mid-block-icon { font-size: 1.6rem; line-height: 1; }
+    .mid-block-val {
+      font-family: 'Courier New', monospace;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #3b9eff;
+      min-width: 2ch;
+      text-align: right;
     }
 
     /* Bottom half — player */
@@ -438,7 +448,21 @@
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
+      position: relative;
     }
+
+    .player-block-badge {
+      position: absolute;
+      top: -1.4rem;
+      right: 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #3b9eff;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .player-block-badge.hidden { opacity: 0; }
 
     .debuff-row {
       display: flex;
@@ -449,7 +473,7 @@
     .debuff-tag {
       background: #1a0a1a;
       border: 1px solid #6a2a6a;
-      border-radius: 4px;
+      border-radius: 0;
       color: #c080c0;
       font-size: 0.68rem;
       padding: 0.15rem 0.45rem;
@@ -459,78 +483,53 @@
     .battle-main-row {
       flex: 1;
       display: flex;
-      align-items: stretch;
-      gap: 0.8rem;
-      min-height: 160px;
+      align-items: center;
+      gap: 1.2rem;
+      min-height: 240px;
+      overflow: visible;
     }
 
     .ap-counter {
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.25rem;
-      background: #1a1a2e;
-      border: 1px solid #2a2a4a;
-      border-radius: 8px;
-      padding: 0.7rem 0.6rem;
-      min-width: 58px;
       flex-shrink: 0;
     }
-    .ap-label {
-      font-size: 0.62rem;
-      color: #556;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
+    .ap-label { display: none; }
+    .ap-dots  { display: none; }
     .ap-value {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      color: #3b82f6;
+      color: #fff;
       font-family: 'Courier New', monospace;
       line-height: 1;
     }
-    .ap-dots {
-      display: flex;
-      gap: 3px;
-      margin-top: 2px;
-    }
-    .ap-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #3b82f6;
-      border: 1px solid #1a3a8a;
-    }
-    .ap-dot.empty { background: #0c1a30; }
 
     .game-space {
       flex: 1;
-      background: #06060f;
-      border: 2px solid #16163a;
-      border-radius: 10px;
       display: flex;
       align-items: center;
-      overflow: hidden;
+      overflow: visible;
     }
 
     /* Cards in hand */
     .hand-grid {
       display: flex;
-      gap: 0.5rem;
-      padding: 0.6rem;
+      gap: 0.75rem;
+      padding: 0.6rem 0.8rem;
       width: 100%;
       align-items: flex-start;
-      justify-content: flex-start;
+      justify-content: center;
     }
 
     .hand-card {
-      width: 80px;
-      height: 120px;
+      width: 130px;
+      height: 190px;
       flex-shrink: 0;
-      background: #0e0e22;
-      border: 1px solid #2a2a4a;
-      border-radius: 8px;
-      padding: 0.5rem 0.25rem 0.6rem;
+      background: #152238;
+      border: 1px solid #284060;
+      border-radius: 0;
+      padding: 0.6rem 0.4rem 0.8rem;
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
@@ -541,8 +540,8 @@
     }
     .hand-card:hover:not(.card-disabled) {
       border-color: #4caf50;
-      box-shadow: 0 0 14px rgba(76,175,80,0.35);
-      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.55);
+      transform: translateY(-14px);
     }
     .hand-card.card-disabled {
       opacity: 0.38;
@@ -556,33 +555,33 @@
 
     .hand-card-ap {
       position: absolute;
-      top: 0.3rem; left: 0.35rem;
-      width: 18px; height: 18px;
+      top: 0.4rem; left: 0.45rem;
+      width: 26px; height: 26px;
       background: #1a4fa8;
       border: 1px solid #2563eb;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.65rem; font-weight: 800;
+      font-size: 0.88rem; font-weight: 800;
       color: #fff; font-family: 'Courier New', monospace;
     }
 
     .hand-card-name {
-      font-size: 0.68rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: #dde;
       text-align: center;
-      margin-top: 1.1rem;
+      margin-top: 1.6rem;
       line-height: 1.25;
     }
 
     .hand-card-hr {
       border: none;
-      border-top: 1px solid #1e1e3a;
+      border-top: 1px solid #1e2e48;
       margin: 0;
     }
 
     .hand-card-desc {
-      font-size: 0.55rem;
+      font-size: 0.72rem;
       color: #668;
       text-align: center;
       line-height: 1.35;
@@ -596,9 +595,9 @@
       flex-direction: column;
       align-items: center;
       gap: 0.1rem;
-      background: #0e0e22;
-      border: 1px solid #2a2a4a;
-      border-radius: 6px;
+      background: #152238;
+      border: 1px solid #284060;
+      border-radius: 0;
       padding: 0.35rem 0.5rem;
     }
     .block-icon { font-size: 0.9rem; line-height: 1; }
@@ -611,10 +610,12 @@
 
     /* Enemy-turn flash */
     @keyframes enemy-flash {
-      0%,100% { background: #0d0d1a; }
+      0%,100% { background: #0e1c30; }
       50%      { background: #1a0808; }
     }
     .battle-overlay.enemy-turn { animation: enemy-flash 0.5s ease 1; }
+    .battle-overlay.boss-battle { background: #1c1400; }
+    .battle-overlay.boss-battle.enemy-turn { animation: none; background: #2a1e00; }
 
     .side-buttons {
       display: flex;
@@ -624,9 +625,9 @@
       flex-shrink: 0;
     }
     .side-btn {
-      background: #1a1a2e;
-      border: 1px solid #2a2a4a;
-      border-radius: 6px;
+      background: #1c2e4a;
+      border: 1px solid #284060;
+      border-radius: 0;
       color: #aab;
       font-size: 0.82rem;
       font-weight: 600;
@@ -635,7 +636,7 @@
       transition: background 0.15s, border-color 0.15s, color 0.15s;
       white-space: nowrap;
     }
-    .side-btn:hover { background: #22223e; border-color: #3b3b6a; color: #fff; }
+    .side-btn:hover { background: #1e3254; border-color: #3b3b6a; color: #fff; }
 
     .end-turn-btn {
       background: #1a4fa8;
@@ -649,7 +650,7 @@
     .shop-overlay {
       position: fixed;
       inset: 0;
-      background: #0d0d1a;
+      background: #0e1c30;
       z-index: 50;
       overflow-y: auto;
       display: flex;
@@ -674,11 +675,11 @@
     }
     .shop-title { color: #fff; font-size: 1.5rem; font-weight: 700; }
     .shop-close-btn {
-      background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 6px;
+      background: #1c2e4a; border: 1px solid #284060; border-radius: 0;
       color: #aab; font-size: 0.82rem; padding: 0.45rem 0.9rem; cursor: pointer;
       transition: background 0.15s, color 0.15s;
     }
-    .shop-close-btn:hover { background: #22223e; color: #fff; }
+    .shop-close-btn:hover { background: #1e3254; color: #fff; }
 
     .shop-podium {
       display: flex;
@@ -688,21 +689,21 @@
     .podium-display {
       width: 200px;
       height: 130px;
-      background: #111126;
+      background: #13223a;
       border: 2px solid #2a2a5a;
       border-bottom: none;
-      border-radius: 10px 10px 0 0;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #2a2a4a;
+      color: #284060;
       font-size: 0.72rem;
     }
     .podium-base {
       width: 260px;
       height: 18px;
-      background: linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%);
-      border-radius: 0 0 10px 10px;
+      background: linear-gradient(180deg, #284060 0%, #1c2e4a 100%);
+      border-radius: 0;
       border: 2px solid #2a2a5a;
       border-top: none;
     }
@@ -722,9 +723,9 @@
     }
 
     .shop-card {
-      background: #0e0e22;
-      border: 1px solid #2a2a4a;
-      border-radius: 10px;
+      background: #152238;
+      border: 1px solid #284060;
+      border-radius: 0;
       padding: 0.6rem 0.3rem 0.5rem;
       display: flex;
       flex-direction: column;
@@ -736,7 +737,6 @@
     }
     .shop-card:hover:not(.sold):not(.broke) {
       border-color: #ffd700;
-      box-shadow: 0 0 14px rgba(255, 215, 0, 0.18);
     }
     .shop-card.sold  { opacity: 0.35; cursor: not-allowed; }
     .shop-card.broke { opacity: 0.5;  cursor: not-allowed; }
@@ -744,7 +744,7 @@
     .shop-card-ap {
       position: absolute; top: 0.35rem; left: 0.4rem;
       width: 18px; height: 18px;
-      background: #1a4fa8; border: 1px solid #2563eb; border-radius: 50%;
+      background: #1a4fa8; border: 1px solid #2563eb; border-radius: 0;
       display: flex; align-items: center; justify-content: center;
       font-size: 0.65rem; font-weight: 800; color: #fff;
       font-family: 'Courier New', monospace;
@@ -753,26 +753,26 @@
       font-size: 0.75rem; font-weight: 700; color: #dde;
       text-align: center; margin-top: 1.4rem; line-height: 1.2;
     }
-    .shop-card-hr { border: none; border-top: 1px solid #1e1e3a; margin: 0.2rem 0; }
+    .shop-card-hr { border: none; border-top: 1px solid #1e2e48; margin: 0.2rem 0; }
     .shop-card-desc {
       font-size: 0.58rem; color: #668; text-align: center;
       line-height: 1.35; flex: 1; padding: 0 0.1rem;
     }
     .shop-card-price {
-      background: #1a1500; border: 1px solid #4a3a00; border-radius: 5px;
+      background: #1a1500; border: 1px solid #4a3a00; border-radius: 0;
       color: #ffd700; font-size: 0.72rem; font-weight: 700;
       text-align: center; padding: 0.2rem 0;
       font-family: 'Courier New', monospace;
       margin-top: auto;
     }
-    .shop-card.sold  .shop-card-price { background: #0e0e1a; border-color: #2a2a4a; color: #334; }
+    .shop-card.sold  .shop-card-price { background: #0e0e1a; border-color: #284060; color: #334; }
     .shop-card.broke .shop-card-price { color: #a84040; border-color: #4a2020; background: #120808; }
 
     /* ── Artifact screen ────────────────────────────────────────────────────── */
     .artifact-overlay {
       position: fixed;
       inset: 0;
-      background: #0d0d1a;
+      background: #0e1c30;
       z-index: 50;
       display: flex;
       flex-direction: column;
@@ -816,16 +816,15 @@
     }
     .artifact-podium:hover .artifact-display {
       border-color: #ff5050;
-      box-shadow: 0 0 18px rgba(255, 80, 80, 0.2);
     }
 
     .artifact-display {
       width: 150px;
       height: 190px;
-      background: #111126;
+      background: #13223a;
       border: 2px solid #2a2a5a;
       border-bottom: none;
-      border-radius: 10px 10px 0 0;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -835,10 +834,10 @@
     .artifact-base {
       width: 180px;
       height: 22px;
-      background: linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%);
+      background: linear-gradient(180deg, #284060 0%, #1c2e4a 100%);
       border: 2px solid #2a2a5a;
       border-top: none;
-      border-radius: 0 0 10px 10px;
+      border-radius: 0;
     }
 
     .artifact-footer {
@@ -849,16 +848,16 @@
     }
 
     .artifact-skip-btn {
-      background: #1a1a2e;
-      border: 1px solid #2a2a4a;
-      border-radius: 6px;
+      background: #1c2e4a;
+      border: 1px solid #284060;
+      border-radius: 0;
       color: #aab;
       font-size: 0.82rem;
       padding: 0.5rem 1.1rem;
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
     }
-    .artifact-skip-btn:hover { background: #22223e; color: #fff; }
+    .artifact-skip-btn:hover { background: #1e3254; color: #fff; }
 
     .artifact-hover-desc {
       min-height: 2.5rem;
@@ -909,9 +908,9 @@
     .deck-overlay.hidden { display: none; }
 
     .deck-modal {
-      background: #111126;
-      border: 1px solid #2a2a4a;
-      border-radius: 14px;
+      background: #13223a;
+      border: 1px solid #284060;
+      border-radius: 0;
       width: 100%;
       max-width: 680px;
       max-height: 85vh;
@@ -925,7 +924,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 1.2rem 0.8rem;
-      border-bottom: 1px solid #1e1e3a;
+      border-bottom: 1px solid #1e2e48;
       flex-shrink: 0;
     }
     .deck-modal-title {
@@ -960,9 +959,9 @@
     }
 
     .card {
-      background: #0e0e22;
-      border: 1px solid #2a2a4a;
-      border-radius: 9px;
+      background: #152238;
+      border: 1px solid #284060;
+      border-radius: 0;
       padding: 0.65rem 0.4rem 0.75rem;
       display: flex;
       flex-direction: column;
@@ -975,7 +974,6 @@
     }
     .card:hover {
       border-color: #3b3b6a;
-      box-shadow: 0 4px 16px rgba(59, 59, 160, 0.25);
     }
 
     .card-ap {
@@ -986,7 +984,7 @@
       height: 22px;
       background: #1a4fa8;
       border: 1px solid #2563eb;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1007,7 +1005,7 @@
 
     .card-divider {
       border: none;
-      border-top: 1px solid #1e1e3a;
+      border-top: 1px solid #1e2e48;
     }
 
     .card-desc {
@@ -1017,6 +1015,149 @@
       line-height: 1.45;
       padding: 0 0.15rem;
     }
+
+    /* ── Event screen ────────────────────────────────────────────────────────── */
+    .event-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0e1c30;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .event-overlay.hidden { display: none; }
+
+    .event-content {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.8rem;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .event-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #40dfbf;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .event-body {
+      font-size: 0.88rem;
+      color: #778;
+      text-align: center;
+      line-height: 1.6;
+      max-width: 400px;
+    }
+
+    .event-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .event-option-btn {
+      background: #13223a;
+      border: 1px solid #284060;
+      border-radius: 0;
+      color: #ccd;
+      font-size: 0.88rem;
+      padding: 0.9rem 1.2rem;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      line-height: 1.4;
+    }
+    .event-option-btn:hover:not(:disabled) { background: #1a2e50; border-color: #40dfbf; color: #fff; }
+    .event-option-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
+    .event-option-cost {
+      font-family: 'Courier New', monospace;
+      color: #f5c842;
+      font-size: 0.78rem;
+      display: block;
+      margin-top: 0.25rem;
+    }
+
+    .event-footer {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .event-skip-btn {
+      background: #1c2e4a;
+      border: 1px solid #284060;
+      border-radius: 0;
+      color: #aab;
+      font-size: 0.82rem;
+      padding: 0.5rem 1.1rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .event-skip-btn:hover { background: #1e3254; color: #fff; }
+
+    /* ── Remove card overlay ─────────────────────────────────────────────────── */
+    .remove-card-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 18, 0.92);
+      z-index: 150;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .remove-card-overlay.hidden { display: none; }
+
+    .remove-card-modal {
+      background: #13223a;
+      border: 1px solid #284060;
+      border-radius: 0;
+      width: 100%;
+      max-width: 680px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .remove-card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 1rem 1.2rem 0.8rem;
+      border-bottom: 1px solid #1e2e48;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .remove-card-title { font-size: 1rem; font-weight: 700; color: #fff; }
+    .remove-card-hint  { font-size: 0.72rem; color: #556; }
+
+    .remove-card-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 1rem 1.2rem 1.2rem;
+      overflow-y: auto;
+      justify-content: flex-start;
+    }
+    .remove-card-grid .card { cursor: pointer; }
+    .remove-card-grid .card:hover {
+      border-color: #e94560;
+    }
+
   </style>
 </head>
 <body>
@@ -1085,9 +1226,32 @@
     <div class="win-modal">
       <div class="win-title">Victory! ★</div>
       <div class="win-gold-row" id="winGoldRow"></div>
-      <div class="win-card-label">Choose a card to add to your deck</div>
+      <div class="win-card-label" id="winCardLabel">Choose a card to add to your deck</div>
       <div class="win-card-choices" id="winCardChoices"></div>
       <button class="win-skip-btn" onclick="skipCardReward()">Skip</button>
+    </div>
+  </div>
+
+  <!-- ── Event screen overlay ─────────────────────────────────────────────── -->
+  <div id="eventScreen" class="event-overlay hidden">
+    <div class="event-content">
+      <div class="event-title" id="eventTitle"></div>
+      <div class="event-body" id="eventBody"></div>
+      <div class="event-options" id="eventOptions"></div>
+    </div>
+    <div class="event-footer">
+      <button class="event-skip-btn" onclick="closeEvent()">Skip</button>
+    </div>
+  </div>
+
+  <!-- ── Remove card overlay ───────────────────────────────────────────────── -->
+  <div id="removeCardOverlay" class="remove-card-overlay hidden">
+    <div class="remove-card-modal">
+      <div class="remove-card-header">
+        <span class="remove-card-title">Remove a Card</span>
+        <span class="remove-card-hint">Click a card to permanently remove it from your deck</span>
+      </div>
+      <div class="remove-card-grid" id="removeCardGrid"></div>
     </div>
   </div>
 
@@ -1171,11 +1335,16 @@
         <div class="combo-box">
           <span class="combo-value" id="comboValue">X1.00</span>
         </div>
+        <div class="mid-block-display">
+          <span class="mid-block-icon">🛡️</span>
+          <span class="mid-block-val" id="midBlockVal">0</span>
+        </div>
       </div>
 
       <!-- Bottom half: player -->
       <div class="battle-bottom">
         <div class="player-hp-area">
+          <span id="playerBlockBadge" class="player-block-badge hidden"></span>
           <div class="hp-label">
             <span>Player</span>
             <span id="playerHpText">20 / 20</span>
@@ -1201,10 +1370,6 @@
           <div class="game-space" id="gameSpace"></div>
 
           <div class="side-buttons">
-            <div class="block-display">
-              <div class="block-icon">🛡️</div>
-              <div class="block-val" id="blockVal">0</div>
-            </div>
             <button class="side-btn end-turn-btn" id="endTurnBtn" onclick="endPlayerTurn()">End Turn</button>
             <button class="side-btn" onclick="openDeck()">Deck</button>
             <button class="side-btn">Discard</button>
@@ -1354,7 +1519,7 @@
     }
 
     // ── Player health & gold ──────────────────────────────────────────────────
-    const PLAYER_MAX_HP = 70;
+    let PLAYER_MAX_HP = 70;
     let   playerHp      = PLAYER_MAX_HP;
     let   playerGold    = 0;
 
@@ -1384,6 +1549,7 @@
       'Wild Swipes':      { ap: 1, desc: 'Attack twice, dealing 7 damage per hit.' },
       'Rage':             { ap: 1, desc: 'Deal 7 damage. Deals 14 instead at X4.00+ adrenaline.' },
       'Heavy Hit':        { ap: 1, desc: 'Deal 8 damage.' },
+      'Sacrifice':        { ap: 1, desc: 'Lose 4 HP to deal 16 damage.' },
     };
 
     // Cards that can appear as rewards
@@ -1447,7 +1613,7 @@
       const traveled  = isPathEdge(fromId, toId);
       const highlight = current === fromId && available.has(toId);
 
-      const stroke = highlight ? '#4caf50' : traveled ? '#3b82f6' : '#141428';
+      const stroke = highlight ? '#4caf50' : traveled ? '#3b82f6' : '#2a4060';
       const sw     = (highlight || traveled) ? 2 : 1.5;
       const marker = highlight ? 'ah-green' : traveled ? 'ah-blue' : 'ah-dim';
 
@@ -1470,20 +1636,20 @@
       let fill, stroke, sw, textFill, filt = '';
 
       if (isBoss) {
-        if      (isCurr)   { fill='#2a1c00'; stroke='#ffd700'; sw=3;   textFill='#ffd700'; filt='filter="url(#f-gold)"'; }
-        else if (isAvail)  { fill='#161000'; stroke='#9a7000'; sw=2.5; textFill='#b89000'; filt='filter="url(#f-gold)"'; }
-        else               { fill='#0c0900'; stroke='#261a00'; sw=2;   textFill='#322200'; }
+        if      (isCurr)   { fill='#2a1c00'; stroke='#ffd700'; sw=3;   textFill='#ffd700'; }
+        else if (isAvail)  { fill='#1e1400'; stroke='#c89000'; sw=2.5; textFill='#c89000'; }
+        else               { fill='#1a1400'; stroke='#4a3800'; sw=2;   textFill='#6a5020'; }
       } else if (isCurr) {
-        fill='#0c1e4a'; stroke='#3b82f6'; sw=3; textFill='#fff'; filt='filter="url(#f-blue)"';
+        fill='#0c2050'; stroke='#3b82f6'; sw=3; textFill='#fff';
       } else if (isAvail) {
-        fill = isX ? '#1c0606' : '#071610';
-        stroke='#4caf50'; sw=2.5; textFill='#4caf50'; filt='filter="url(#f-green)"';
+        fill = isX ? '#251010' : '#0a2018';
+        stroke='#4caf50'; sw=2.5; textFill='#4caf50';
       } else if (inPath) {
-        fill = isX ? '#160404' : '#080c1e'; stroke='#18305a'; sw=2; textFill='#244878';
+        fill = isX ? '#201418' : '#162840'; stroke = isX ? '#603040' : '#2a5080'; sw=2; textFill = isX ? '#c06080' : '#4a80b0';
       } else {
-        fill   = isX ? '#100202' : '#090916';
-        stroke = isX ? '#220a0a' : '#14142e'; sw=1.5;
-        textFill = isX ? '#2e0e0e' : '#1e1e3e';
+        fill   = isX ? '#1e1420' : '#152030';
+        stroke = isX ? '#503060' : '#2a4060'; sw=1.5;
+        textFill = isX ? '#8050a0' : '#4a6890';
       }
 
       const label = isBoss ? '★' : node.letter;
@@ -1505,7 +1671,7 @@
       const svg = document.getElementById('board');
       let h = `<defs>
         <marker id="ah-dim"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-          <path d="M0,0 L10,5 L0,10 Z" fill="#141428"/>
+          <path d="M0,0 L10,5 L0,10 Z" fill="#2a4060"/>
         </marker>
         <marker id="ah-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
           <path d="M0,0 L10,5 L0,10 Z" fill="#4caf50"/>
@@ -1513,29 +1679,17 @@
         <marker id="ah-blue"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
           <path d="M0,0 L10,5 L0,10 Z" fill="#3b82f6"/>
         </marker>
-        <filter id="f-green" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="f-blue" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="f-gold" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
       </defs>`;
 
       // Subtle band behind X row
       const xBandY    = ROW_Y[X_ROW_IDX];
       const startBandY = ROW_Y[ROW_Y.length - 1];
       h += `<rect x="24" y="${xBandY - R - 10}" width="${W - 48}" height="${(R + 10) * 2}"
-                  fill="rgba(140,15,15,0.07)" rx="8" stroke="rgba(120,10,10,0.12)" stroke-width="1"/>`;
+                  fill="rgba(160,30,30,0.10)" rx="8" stroke="rgba(160,40,40,0.20)" stroke-width="1"/>`;
       h += `<rect x="24" y="${startBandY - R - 10}" width="${W - 48}" height="${(R + 10) * 2}"
-                  fill="rgba(15,80,15,0.06)" rx="8" stroke="rgba(20,80,20,0.10)" stroke-width="1"/>`;
-      h += `<text x="20" y="${startBandY + 5}" font-family="monospace" font-size="9" fill="#1a3a1a" text-anchor="start">START</text>`;
-      h += `<text x="20" y="${xBandY + 5}" font-family="monospace" font-size="9" fill="#3a1010" text-anchor="start">X ROW</text>`;
+                  fill="rgba(20,100,20,0.10)" rx="8" stroke="rgba(30,100,30,0.18)" stroke-width="1"/>`;
+      h += `<text x="20" y="${startBandY + 5}" font-family="monospace" font-size="9" fill="#2a6a2a" text-anchor="start">START</text>`;
+      h += `<text x="20" y="${xBandY + 5}" font-family="monospace" font-size="9" fill="#7a2020" text-anchor="start">X ROW</text>`;
 
       // All edges (behind nodes)
       for (const [from, targets] of Object.entries(OUT))
@@ -1632,13 +1786,24 @@
       return move;
     }
 
+    function setBlockDisplay(val) {
+      document.getElementById('midBlockVal').textContent = val;
+      const badge = document.getElementById('playerBlockBadge');
+      if (val > 0) {
+        badge.textContent = `+${val}`;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
     function dealToPlayer(dmg) {
       const absorbed   = Math.min(playerBlock, dmg);
       playerBlock      = Math.max(0, playerBlock - absorbed);
       const net        = dmg - absorbed;
       lastEnemyDamage += net;
       setPlayerHp(playerHp - net);
-      document.getElementById('blockVal').textContent = playerBlock;
+      setBlockDisplay(playerBlock);
     }
 
     function dealToEnemy(dmg) {
@@ -1655,19 +1820,20 @@
     }
 
     function executeEnemyMove(move) {
+      const dm = isBossFight ? 2 : 1;
       switch (move.id) {
-        case 'triple_strike': dealToPlayer(3); dealToPlayer(3); dealToPlayer(3); break;
-        case 'guard_strike':  enemyBlock += 5; dealToPlayer(5);                  break;
-        case 'double_heavy':  dealToPlayer(6); dealToPlayer(6);                  break;
+        case 'triple_strike': dealToPlayer(3*dm); dealToPlayer(3*dm); dealToPlayer(3*dm); break;
+        case 'guard_strike':  enemyBlock += 5;    dealToPlayer(5*dm);                     break;
+        case 'double_heavy':  dealToPlayer(6*dm); dealToPlayer(6*dm);                     break;
         case 'fib_strike': {
           const dmg = FIB[Math.min(skeletonFibIdx, FIB.length - 1)];
-          dealToPlayer(dmg);
+          dealToPlayer(dmg * dm);
           skeletonFibIdx++;
           break;
         }
-        case 'slime_shield': enemyBlock += 12; dealToPlayer(3);                              break;
-        case 'slime_regen':  enemyBlock += (enemyMaxHp - enemyHp); dealToPlayer(5);         break;
-        case 'slime_debuff': playerMissDebuffTurns = 3;                                      break;
+        case 'slime_shield': enemyBlock += 12; dealToPlayer(3*dm);                      break;
+        case 'slime_regen':  enemyBlock += (enemyMaxHp - enemyHp); dealToPlayer(5*dm); break;
+        case 'slime_debuff': playerMissDebuffTurns = 3;                                  break;
       }
     }
 
@@ -1709,7 +1875,7 @@
       refreshApDots(battleAp, BATTLE_MAX_AP);
 
       // Block
-      document.getElementById('blockVal').textContent = playerBlock;
+      setBlockDisplay(playerBlock);
 
       // Debuffs
       const debuffRow = document.getElementById('debuffRow');
@@ -1762,6 +1928,7 @@
       if (name === 'Wild Swipes')     { dealToEnemy(applyDice(7)); dealToEnemy(applyDice(7)); }
       if (name === 'Rage')            { dealToEnemy(applyDice(comboMult >= 4 ? 14 : 7)); }
       if (name === 'Heavy Hit')       { dealToEnemy(applyDice(8)); }
+      if (name === 'Sacrifice')       { setPlayerHp(playerHp - 4); dealToEnemy(applyDice(16)); }
 
       renderBattleUI();
 
@@ -1823,33 +1990,53 @@
     }
 
     // ── Win screen ────────────────────────────────────────────────────────────
-    let pendingGold = 0;
+    let pendingGold         = 0;
+    let pendingCardChoices  = [];
+    let ambushPicksLeft     = 0;
 
     function showWinScreen() {
-      pendingGold = Math.floor(Math.random() * 21) + 10;  // 10-30
+      const isAmbush  = isAmbushBattle;
+      const baseGold  = Math.floor(Math.random() * 21) + 10;  // 10-30
+      pendingGold     = isAmbush ? baseGold * 2 : baseGold;
+      ambushPicksLeft = isAmbush ? 2 : 1;
+
       document.getElementById('winGoldRow').textContent = `+ ${pendingGold} gold`;
 
-      // Pick 3 random cards from the reward pool (repeats allowed)
-      const choices = Array.from({ length: 3 }, () =>
+      pendingCardChoices = Array.from({ length: 3 }, () =>
         REWARD_POOL[Math.floor(Math.random() * REWARD_POOL.length)]
       );
-      document.getElementById('winCardChoices').innerHTML = choices.map(name => {
+      renderWinCards();
+      document.getElementById('winScreen').classList.remove('hidden');
+    }
+
+    function renderWinCards() {
+      let label = 'Choose a card to add to your deck';
+      if (isAmbushBattle) {
+        label = ambushPicksLeft === 2 ? 'Choose 2 cards to add to your deck' : 'Choose 1 more card';
+      }
+      document.getElementById('winCardLabel').textContent = label;
+      document.getElementById('winCardChoices').innerHTML = pendingCardChoices.map((name, i) => {
         const def = CARD_DEFS[name];
-        return `<div class="card" onclick="claimCardReward('${name}')">
+        return `<div class="card" onclick="claimCardReward(${i})">
           <div class="card-ap">${def.ap}</div>
           <div class="card-name">${name}</div>
           <hr class="card-divider" />
           <div class="card-desc">${def.desc}</div>
         </div>`;
       }).join('');
-
-      document.getElementById('winScreen').classList.remove('hidden');
     }
 
-    function claimCardReward(name) {
+    function claimCardReward(index) {
+      const name = pendingCardChoices[index];
       playerDeck.push(name);
-      battleDeck.push(name);         // also goes into the persistent draw pile
-      finishBattle();
+      battleDeck.push(name);
+      pendingCardChoices.splice(index, 1);
+      ambushPicksLeft--;
+      if (ambushPicksLeft <= 0 || pendingCardChoices.length === 0) {
+        finishBattle();
+      } else {
+        renderWinCards();
+      }
     }
 
     function skipCardReward() {
@@ -1858,16 +2045,27 @@
 
     function finishBattle() {
       setGold(playerGold + pendingGold);
+      isAmbushBattle = false;
+      const wasBoss  = isBossFight;
+      isBossFight    = false;
       document.getElementById('winScreen').classList.add('hidden');
       closeBattle();
-      setStatus('Enemy defeated! Keep climbing…', '#4caf50');
+      if (wasBoss) {
+        won = true;
+        render();
+        setStatus('★  You defeated the Boss! You win!  ★', '#ffd700');
+      } else {
+        setStatus('Enemy defeated! Keep climbing…', '#4caf50');
+      }
     }
 
-    function openBattle(nodeId) {
+    let isBossFight = false;
+
+    function openBattle(nodeId, hpMultiplier = 1) {
       battleNodeId  = nodeId;
       battleEnemy   = ENEMY_ROSTER[Math.floor(Math.random() * ENEMY_ROSTER.length)];
-      enemyHp       = battleEnemy.hp;
-      enemyMaxHp    = battleEnemy.hp;
+      enemyHp       = Math.floor(battleEnemy.hp * hpMultiplier);
+      enemyMaxHp    = Math.floor(battleEnemy.hp * hpMultiplier);
       enemyBlock            = 0;
       skeletonFibIdx        = 0;
       playerMissDebuffTurns = 0;
@@ -1884,13 +2082,19 @@
       document.getElementById('enemyEmoji').textContent = battleEnemy.emoji;
       document.getElementById('endTurnBtn').disabled    = false;
 
+      const overlay = document.getElementById('battleScreen');
+      if (isBossFight) overlay.classList.add('boss-battle');
+      else             overlay.classList.remove('boss-battle');
+
       renderBattleUI();
-      document.getElementById('battleScreen').classList.remove('hidden');
+      overlay.classList.remove('hidden');
       window.scrollTo(0, 0);
     }
 
     function closeBattle() {
-      document.getElementById('battleScreen').classList.add('hidden');
+      const overlay = document.getElementById('battleScreen');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('boss-battle');
     }
 
     // ── Interaction ───────────────────────────────────────────────────────────
@@ -2023,6 +2227,117 @@
       renderShopCards();
     }
 
+    // ── Events ────────────────────────────────────────────────────────────────
+    const EVENT_POOL = ['Spa', 'Ambush', 'Stocking up'];
+    let isAmbushBattle = false;
+
+    function openEvent() {
+      const pick = EVENT_POOL[Math.floor(Math.random() * EVENT_POOL.length)];
+      if (pick === 'Ambush') {
+        isAmbushBattle = true;
+        setStatus('Ambush! A stronger enemy attacks!', '#e94560');
+        openBattle(null, 1.5);
+        return;
+      }
+      if (pick === 'Stocking up') {
+        document.getElementById('eventTitle').textContent = '🎒  Stocking Up';
+        document.getElementById('eventBody').textContent =
+          'You find a cache of supplies tucked beneath a mossy rock. What do you need most?';
+        document.getElementById('eventOptions').innerHTML = `
+          <button class="event-option-btn" onclick="stockingHeal()">
+            Rest and recover — heal 30% max HP
+            <span class="event-option-cost" style="color:#4caf50">Free</span>
+          </button>
+          <button class="event-option-btn" onclick="stockingMaxHp()">
+            Take the tonic — permanently increase max HP by +7
+            <span class="event-option-cost" style="color:#4caf50">Free</span>
+          </button>`;
+        document.getElementById('eventScreen').classList.remove('hidden');
+        window.scrollTo(0, 0);
+        return;
+      }
+      // Spa
+      document.getElementById('eventTitle').textContent = '♨️  Spa';
+      document.getElementById('eventBody').textContent =
+        'A warm spring bubbles up from the earth. The weary traveller may rest here awhile.';
+      renderSpaOptions();
+      document.getElementById('eventScreen').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function stockingHeal() {
+      const healAmt = Math.floor(PLAYER_MAX_HP * 0.3);
+      setPlayerHp(playerHp + healAmt);
+      setStatus(`Recovered ${healAmt} HP from supplies.`, '#4caf50');
+      closeEvent();
+    }
+
+    function stockingMaxHp() {
+      PLAYER_MAX_HP += 7;
+      setPlayerHp(playerHp);   // re-clamp and refresh UI with new max
+      setStatus('Max HP increased by 7!', '#4caf50');
+      closeEvent();
+    }
+
+    function renderSpaOptions() {
+      const canHeal   = playerGold >= 40;
+      const canRemove = playerGold >= 20;
+      document.getElementById('eventOptions').innerHTML = `
+        <button class="event-option-btn" onclick="spaHeal()" ${canHeal ? '' : 'disabled'}>
+          Soak in the springs — restore 30% max HP
+          <span class="event-option-cost">🪙 40 gold</span>
+        </button>
+        <button class="event-option-btn" onclick="spaRemoveCard()" ${canRemove ? '' : 'disabled'}>
+          Trade a card to the keeper — remove a card from your deck
+          <span class="event-option-cost">🪙 20 gold</span>
+        </button>`;
+    }
+
+    function spaHeal() {
+      if (playerGold < 40) return;
+      setGold(playerGold - 40);
+      const healAmt = Math.floor(PLAYER_MAX_HP * 0.3);
+      setPlayerHp(playerHp + healAmt);
+      setStatus(`Healed ${healAmt} HP at the Spa.`, '#40dfbf');
+      closeEvent();
+    }
+
+    function spaRemoveCard() {
+      if (playerGold < 20) return;
+      const grid = document.getElementById('removeCardGrid');
+      grid.innerHTML = playerDeck.map((name, i) => {
+        const def = CARD_DEFS[name];
+        return `<div class="card" onclick="removeCardFromDeck(${i})">
+          <div class="card-ap">${def.ap}</div>
+          <div class="card-name">${name}</div>
+          <hr class="card-divider" />
+          <div class="card-desc">${cardDesc(name)}</div>
+        </div>`;
+      }).join('');
+      document.getElementById('removeCardOverlay').classList.remove('hidden');
+    }
+
+    function removeCardFromDeck(index) {
+      if (playerGold < 20) return;
+      setGold(playerGold - 20);
+      const removed = playerDeck.splice(index, 1)[0];
+      // Remove one copy from persistent battle piles
+      const bdIdx = battleDeck.indexOf(removed);
+      if (bdIdx !== -1) { battleDeck.splice(bdIdx, 1); }
+      else {
+        const dcIdx = battleDiscard.indexOf(removed);
+        if (dcIdx !== -1) battleDiscard.splice(dcIdx, 1);
+      }
+      document.getElementById('removeCardOverlay').classList.add('hidden');
+      setStatus(`Removed ${removed} from your deck.`, '#40dfbf');
+      closeEvent();
+    }
+
+    function closeEvent() {
+      document.getElementById('eventScreen').classList.add('hidden');
+      document.getElementById('removeCardOverlay').classList.add('hidden');
+    }
+
     // ── Dev tools box ─────────────────────────────────────────────────────────
     function handleDevTools(e) {
       if (e.key !== 'Enter') return;
@@ -2058,11 +2373,12 @@
       pathArr.push(id);
 
       if (id === 'boss') {
-        won       = true;
         available = new Set();
-        setStatus('★  You reached the Boss!  ★', '#ffd700');
+        setStatus('★  The Boss awaits…  ★', '#ffd700');
         render();
         updatePathDisplay();
+        isBossFight = true;
+        openBattle('boss', 3);
       } else if (NODES[id].letter === 'A') {
         available = new Set(OUT[id]);
         setStatus('Entering combat…', '#e94560');
@@ -2081,6 +2397,11 @@
         render();
         updatePathDisplay();
         openArtifacts();
+      } else if (NODES[id].letter === 'E') {
+        available = new Set(OUT[id]);
+        render();
+        updatePathDisplay();
+        openEvent();
       } else {
         available = new Set(OUT[id]);
         setStatus(pathArr.length === 1 ? 'Now choose where to go next' : 'Keep climbing…', '#4caf50');
@@ -2102,9 +2423,12 @@
 
     function resetGame() {
       // Reset player state
+      PLAYER_MAX_HP = 70;
       setPlayerHp(PLAYER_MAX_HP);
       setGold(0);
       playerArtifacts = [];
+      isAmbushBattle  = false;
+      isBossFight     = false;
       updateMenuArtifacts();
       playerDeck.splice(0, playerDeck.length, ...DEFAULT_DECK);
       battleDeck    = shuffle([...DEFAULT_DECK]);
