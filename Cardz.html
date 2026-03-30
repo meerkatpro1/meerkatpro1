@@ -177,6 +177,27 @@
       color: #f5c842;
       font-family: 'Courier New', monospace;
     }
+    .menu-floor-block {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.5rem;
+      background: #1a1600;
+      border: 1px solid #3a2e00;
+      border-radius: 0;
+    }
+    .menu-floor-title {
+      font-size: 0.62rem;
+      color: #7a6010;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .menu-floor-value {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #ffd700;
+      font-family: 'Courier New', monospace;
+    }
 
     /* ── Win screen ─────────────────────────────────────────────────────────── */
     .win-overlay {
@@ -614,8 +635,8 @@
       50%      { background: #1a0808; }
     }
     .battle-overlay.enemy-turn { animation: enemy-flash 0.5s ease 1; }
-    .battle-overlay.boss-battle { background: #1c1400; }
-    .battle-overlay.boss-battle.enemy-turn { animation: none; background: #2a1e00; }
+    .battle-overlay.boss-battle { background: #28adff; }
+    .battle-overlay.boss-battle.enemy-turn { animation: none; background: #2cc0f7; }
 
     .side-buttons {
       display: flex;
@@ -683,12 +704,19 @@
 
     .shop-podium {
       display: flex;
+      gap: 1.5rem;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+    .shop-podium-stand {
+      display: flex;
       flex-direction: column;
       align-items: center;
     }
     .podium-display {
-      width: 200px;
-      height: 130px;
+      width: 110px;
+      height: 110px;
       background: #13223a;
       border: 2px solid #2a2a5a;
       border-bottom: none;
@@ -696,16 +724,49 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #284060;
-      font-size: 0.72rem;
+      font-size: 3rem;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .podium-display:hover { border-color: #ffd700; }
+    .podium-display.sold  { opacity: 0.4; cursor: default; }
+    .podium-display.sold:hover { border-color: #2a2a5a; }
+    .podium-price-tag {
+      margin-top: 0.4rem;
+      background: #1a1600;
+      border: 1px solid #3a2e00;
+      color: #ffd700;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      text-align: center;
     }
     .podium-base {
-      width: 260px;
+      width: 160px;
       height: 18px;
       background: linear-gradient(180deg, #284060 0%, #1c2e4a 100%);
       border-radius: 0;
       border: 2px solid #2a2a5a;
       border-top: none;
+    }
+    .shop-artifact-sign {
+      max-width: 220px;
+      background: #12200e;
+      border: 1px solid #2a4a20;
+      padding: 0.6rem 0.8rem;
+      margin-bottom: 22px;
+    }
+    .shop-artifact-sign-name {
+      color: #a0d070;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .shop-artifact-sign-desc {
+      color: #5a8040;
+      font-size: 0.68rem;
+      line-height: 1.4;
     }
 
     .shop-section-label {
@@ -1169,7 +1230,7 @@
 
   <div class="page">
     <div class="game-header">
-      <h1>Cardz</h1>
+      <h1 id="gameTitle">Cardz - Floor 1</h1>
       <div id="statusMsg">Select a node on the bottom row to begin</div>
     </div>
 
@@ -1191,6 +1252,10 @@
         <div class="menu-gold-block">
           <span class="menu-gold-title">Gold</span>
           <span class="menu-gold-value" id="menuGoldValue">🪙 0</span>
+        </div>
+        <div class="menu-floor-block">
+          <span class="menu-floor-title">Floor</span>
+          <span class="menu-floor-value" id="menuFloorValue">1</span>
         </div>
         <button class="map-menu-btn" onclick="openDeck()">Deck</button>
         <div class="menu-artifacts-section" id="menuArtifactsSection" style="display:none">
@@ -1255,6 +1320,17 @@
     </div>
   </div>
 
+  <!-- ── Shovel duplicate overlay ─────────────────────────────────────────── -->
+  <div id="shovelOverlay" class="remove-card-overlay hidden">
+    <div class="remove-card-modal">
+      <div class="remove-card-header">
+        <span class="remove-card-title">🪠 Shovel — Duplicate a Card</span>
+        <span class="remove-card-hint">Click a card to add a free copy to your deck</span>
+      </div>
+      <div class="remove-card-grid" id="shovelCardGrid"></div>
+    </div>
+  </div>
+
   <!-- ── Artifact screen overlay ──────────────────────────────────────────── -->
   <div id="artifactScreen" class="artifact-overlay hidden">
     <div class="artifact-content">
@@ -1298,8 +1374,15 @@
       </div>
 
       <div class="shop-podium">
-        <div class="podium-display" id="podiumDisplay"></div>
-        <div class="podium-base"></div>
+        <div class="shop-artifact-sign" id="shopArtifactSign">
+          <div class="shop-artifact-sign-name" id="shopArtifactSignName"></div>
+          <div class="shop-artifact-sign-desc" id="shopArtifactSignDesc"></div>
+        </div>
+        <div class="shop-podium-stand">
+          <div class="podium-display" id="podiumDisplay" onclick="buyShopArtifact()"></div>
+          <div class="podium-base"></div>
+          <div class="podium-price-tag" id="podiumPriceTag"></div>
+        </div>
       </div>
 
       <div class="shop-section-label">Cards for Sale</div>
@@ -1528,6 +1611,10 @@
       document.getElementById('menuGoldValue').textContent = `🪙 ${playerGold}`;
     }
 
+    function gainGold(amount) {
+      setGold(playerGold + Math.floor(amount * (hasArtifact('Gem') ? 1.5 : 1)));
+    }
+
     function setPlayerHp(val) {
       playerHp = Math.max(0, Math.min(PLAYER_MAX_HP, val));
       const pct = (playerHp / PLAYER_MAX_HP * 100).toFixed(1) + '%';
@@ -1737,9 +1824,8 @@
       {
         name: 'Slime', emoji: '🟢', hp: 41,
         moves: [
-          { weight: 40, intent: 'Shield +12 / Hit 3', id: 'slime_shield' },
-          { weight: 35, intent: '',                    id: 'slime_regen'  },
-          { weight: 25, intent: 'Casts Fumble (3t)',   id: 'slime_debuff' },
+          { weight: 50, intent: 'Shield +12 / Hit 2', id: 'slime_shield' },
+          { weight: 50, intent: '',                    id: 'slime_combo'  },
         ]
       },
     ];
@@ -1775,13 +1861,24 @@
     }
 
     function resolveIntent(move) {
+      const dm = isBossFight ? 2 : 1;
       if (move.id === 'fib_strike') {
-        const dmg = FIB[Math.min(skeletonFibIdx, FIB.length - 1)];
+        const dmg = FIB[Math.min(skeletonFibIdx, FIB.length - 1)] * dm;
         return { ...move, intent: `Fibonacci Strike (${dmg} dmg)` };
       }
-      if (move.id === 'slime_regen') {
-        const block = enemyMaxHp - enemyHp;
-        return { ...move, intent: `Regen +${block} block / Hit 5` };
+      if (move.id === 'slime_combo') {
+        const block = Math.floor(Math.random() * 7) + 3;
+        const dmg   = Math.floor(Math.random() * 5) + 2;
+        return { ...move, intent: `Shield +${block} / Hit ${dmg * dm}`, _block: block, _dmg: dmg };
+      }
+      if (dm > 1) {
+        const bossIntents = {
+          'triple_strike': `Attacks 3× (${3 * dm} each)`,
+          'guard_strike':  `Guards +5 / Hits ${5 * dm}`,
+          'double_heavy':  `Attacks 2× (${6 * dm} each)`,
+          'slime_shield':  `Shield +12 / Hit ${2 * dm}`,
+        };
+        if (bossIntents[move.id]) return { ...move, intent: bossIntents[move.id] };
       }
       return move;
     }
@@ -1802,6 +1899,10 @@
       playerBlock      = Math.max(0, playerBlock - absorbed);
       const net        = dmg - absorbed;
       lastEnemyDamage += net;
+      if (net > 0 && freddyMaskActive) {
+        freddyMaskActive = false;
+        if (battleAp > BATTLE_MAX_AP) battleAp = BATTLE_MAX_AP;
+      }
       setPlayerHp(playerHp - net);
       setBlockDisplay(playerBlock);
     }
@@ -1831,9 +1932,8 @@
           skeletonFibIdx++;
           break;
         }
-        case 'slime_shield': enemyBlock += 12; dealToPlayer(3*dm);                      break;
-        case 'slime_regen':  enemyBlock += (enemyMaxHp - enemyHp); dealToPlayer(5*dm); break;
-        case 'slime_debuff': playerMissDebuffTurns = 3;                                  break;
+        case 'slime_shield': enemyBlock += 12; dealToPlayer(2*dm);                             break;
+        case 'slime_combo':  enemyBlock += (move._block ?? 3); dealToPlayer((move._dmg ?? 2)*dm); break;
       }
     }
 
@@ -1871,8 +1971,8 @@
       setPlayerHp(playerHp);
 
       // AP
-      document.getElementById('apValue').textContent = `${battleAp}/${BATTLE_MAX_AP}`;
-      refreshApDots(battleAp, BATTLE_MAX_AP);
+      document.getElementById('apValue').textContent = `${battleAp}/${currentMaxAp()}`;
+      refreshApDots(battleAp, currentMaxAp());
 
       // Block
       setBlockDisplay(playerBlock);
@@ -1928,9 +2028,18 @@
       if (name === 'Wild Swipes')     { dealToEnemy(applyDice(7)); dealToEnemy(applyDice(7)); }
       if (name === 'Rage')            { dealToEnemy(applyDice(comboMult >= 4 ? 14 : 7)); }
       if (name === 'Heavy Hit')       { dealToEnemy(applyDice(8)); }
-      if (name === 'Sacrifice')       { setPlayerHp(playerHp - 4); dealToEnemy(applyDice(16)); }
+      if (name === 'Sacrifice')       { freddyMaskActive = false; if (battleAp > BATTLE_MAX_AP) battleAp = BATTLE_MAX_AP; setPlayerHp(playerHp - 4); dealToEnemy(applyDice(16)); }
 
       renderBattleUI();
+
+      if (playerHp <= 0) {
+        setTimeout(() => {
+          autoWin = false;
+          closeBattle();
+          if (battleNodeId !== null) resetGame();
+        }, 400);
+        return;
+      }
 
       if (enemyHp <= 0) {
         setTimeout(() => {
@@ -1966,6 +2075,7 @@
 
         if (playerHp <= 0) {
           setTimeout(() => {
+            autoWin = false;
             closeBattle();
             if (battleNodeId !== null) resetGame();
           }, 400);
@@ -1979,7 +2089,7 @@
         if (playerMissDebuffTurns > 0) playerMissDebuffTurns--;
 
         // Start player turn
-        battleAp = BATTLE_MAX_AP;
+        battleAp = currentMaxAp();
         battleDiscard.push(...battleHand.filter(c => c !== null));
         battleHand   = [];
         isPlayerTurn = true;
@@ -1997,7 +2107,7 @@
     function showWinScreen() {
       const isAmbush  = isAmbushBattle;
       const baseGold  = Math.floor(Math.random() * 21) + 10;  // 10-30
-      pendingGold     = isAmbush ? baseGold * 2 : baseGold;
+      pendingGold     = Math.floor((isAmbush ? baseGold * 2 : baseGold) * floorGoldMult);
       ambushPicksLeft = isAmbush ? 2 : 1;
 
       document.getElementById('winGoldRow').textContent = `+ ${pendingGold} gold`;
@@ -2044,39 +2154,67 @@
     }
 
     function finishBattle() {
-      setGold(playerGold + pendingGold);
+      gainGold(pendingGold);
       isAmbushBattle = false;
       const wasBoss  = isBossFight;
       isBossFight    = false;
       document.getElementById('winScreen').classList.add('hidden');
       closeBattle();
-      if (wasBoss) {
-        won = true;
+      if (wasBoss && battleNodeId !== null) {
+        floorNumber++;
+        floorHpMult   *= 1.2;
+        floorGoldMult *= 1.05;
+        current   = null;
+        pathArr   = [];
+        generateGraph();
+        available = new Set(START_ROW);
+        document.getElementById('pathDisplay').innerHTML = '';
+        updateFloorDisplay();
         render();
-        setStatus('★  You defeated the Boss! You win!  ★', '#ffd700');
+        setStatus(`★ Floor ${floorNumber} begins — enemies are ${Math.round((floorHpMult - 1) * 100)}% stronger ★`, '#ffd700');
       } else {
         setStatus('Enemy defeated! Keep climbing…', '#4caf50');
       }
     }
 
-    let isBossFight = false;
+    let isBossFight   = false;
+    let autoWin       = false;
+    let floorNumber   = 1;
+    let floorHpMult   = 1.0;
+    let floorGoldMult = 1.0;
+
+    function updateFloorDisplay() {
+      document.getElementById('menuFloorValue').textContent = floorNumber;
+      document.getElementById('gameTitle').textContent = `Cardz - Floor ${floorNumber}`;
+    }
 
     function openBattle(nodeId, hpMultiplier = 1) {
+      document.getElementById('winScreen').classList.add('hidden');
       battleNodeId  = nodeId;
       battleEnemy   = ENEMY_ROSTER[Math.floor(Math.random() * ENEMY_ROSTER.length)];
-      enemyHp       = Math.floor(battleEnemy.hp * hpMultiplier);
-      enemyMaxHp    = Math.floor(battleEnemy.hp * hpMultiplier);
+      enemyHp       = Math.floor(battleEnemy.hp * hpMultiplier * floorHpMult);
+      enemyMaxHp    = Math.floor(battleEnemy.hp * hpMultiplier * floorHpMult);
       enemyBlock            = 0;
       skeletonFibIdx        = 0;
       playerMissDebuffTurns = 0;
       lastEnemyDamage       = 0;
-      battleAp              = BATTLE_MAX_AP;
+      freddyMaskActive      = hasArtifact('Freddy Mask');
+      battleAp              = currentMaxAp();
       playerBlock   = 0;
       isPlayerTurn  = true;
       comboMult     = 1.00;
       battleHand    = [];
       pickEnemyMove();
       drawHand();
+
+      if (autoWin) {
+        battleDiscard.push(...battleHand.filter(c => c !== null));
+        battleHand    = [];
+        battleDeck    = shuffle([...battleDeck, ...battleDiscard]);
+        battleDiscard = [];
+        showWinScreen();
+        return;
+      }
 
       document.getElementById('enemyName').textContent  = battleEnemy.name;
       document.getElementById('enemyEmoji').textContent = battleEnemy.emoji;
@@ -2112,7 +2250,33 @@
         icon: '🎲',
         desc: 'Passive: All attacks deal a random ±3 bonus damage.',
       },
+      'Freddy Mask': {
+        icon: '🎭',
+        desc: 'Passive: Max AP is 4 until you take HP damage in a fight.',
+      },
+      'Gem': {
+        icon: '💎',
+        desc: 'Passive: All gold gains are increased by 50%.',
+      },
+      'Shovel': {
+        icon: '🪦',
+        desc: 'On pickup: Choose one card in your deck to duplicate for free.',
+      },
+      'Axe': {
+        icon: '🪓',
+        desc: 'Passive: All shop prices are reduced by 30%.',
+      },
+      'Plastic Gun': {
+        icon: '🔫',
+        desc: '❗❓⁉️🚨❗⁉️❓🚨 — Your attacks deal 2× damage, but you cannot heal from any source.',
+      },
     };
+
+    let freddyMaskActive = false;
+
+    function currentMaxAp() {
+      return (hasArtifact('Freddy Mask') && freddyMaskActive) ? 4 : BATTLE_MAX_AP;
+    }
 
     let playerArtifacts = [];
     let artifactChoices = [];
@@ -2122,7 +2286,9 @@
     function blockBonus()   { return hasArtifact('Shield') ? 2 : 0; }
 
     function applyDice(dmg) {
-      return hasArtifact('Dice') ? Math.max(0, dmg + Math.floor(Math.random() * 7) - 3) : dmg;
+      let d = hasArtifact('Dice') ? Math.max(0, dmg + Math.floor(Math.random() * 7) - 3) : dmg;
+      if (hasArtifact('Plastic Gun')) d *= 2;
+      return d;
     }
 
     function cardDesc(name) {
@@ -2167,6 +2333,30 @@
       if (name && !hasArtifact(name)) playerArtifacts.push(name);
       updateMenuArtifacts();
       closeArtifacts();
+      if (name === 'Shovel') openShovelPick();
+    }
+
+    function openShovelPick() {
+      const grid = document.getElementById('shovelCardGrid');
+      grid.innerHTML = playerDeck.map((cardName, i) => {
+        const def = CARD_DEFS[cardName];
+        return `<div class="card" onclick="shovelDuplicate(${i})">
+          <div class="card-ap">${def.ap}</div>
+          <div class="card-name">${cardName}</div>
+          <hr class="card-divider" />
+          <div class="card-desc">${cardDesc(cardName)}</div>
+        </div>`;
+      }).join('');
+      document.getElementById('shovelOverlay').classList.remove('hidden');
+    }
+
+    function shovelDuplicate(index) {
+      const cardName = playerDeck[index];
+      if (!cardName) return;
+      playerDeck.push(cardName);
+      battleDiscard.push(cardName);
+      document.getElementById('shovelOverlay').classList.add('hidden');
+      setStatus(`Duplicated ${cardName}!`, '#4caf50');
     }
 
     function showArtifactDesc(index) {
@@ -2182,13 +2372,44 @@
 
     // ── Shop ──────────────────────────────────────────────────────────────────
     let shopCards = [];
+    let shopArtifact = null;  // { name, price, sold }
+    let shopArtifactsBought = 0;
 
     function generateShop() {
+      const disc = hasArtifact('Axe') ? 0.7 : 1;
       shopCards = Array.from({ length: 9 }, () => ({
         name:  REWARD_POOL[Math.floor(Math.random() * REWARD_POOL.length)],
-        price: Math.floor(Math.random() * 21) + 30,
+        price: Math.floor((Math.floor(Math.random() * 21) + 30) * disc),
         sold:  false,
       }));
+      const artNames = Object.keys(ARTIFACT_DEFS);
+      const pick = artNames[Math.floor(Math.random() * artNames.length)];
+      shopArtifact = {
+        name:  pick,
+        price: Math.floor((Math.floor(Math.random() * 101) + 100) * disc * Math.pow(1.5, shopArtifactsBought)),
+        sold:  false,
+      };
+    }
+
+    function renderShopArtifact() {
+      const art = shopArtifact;
+      const def = ARTIFACT_DEFS[art.name];
+      document.getElementById('podiumDisplay').textContent = art.sold ? '' : def.icon;
+      document.getElementById('podiumDisplay').className   = 'podium-display' + (art.sold ? ' sold' : '');
+      document.getElementById('podiumPriceTag').textContent = art.sold ? 'Sold' : `🪙 ${art.price}`;
+      document.getElementById('shopArtifactSignName').textContent = art.name;
+      document.getElementById('shopArtifactSignDesc').textContent = def.desc;
+    }
+
+    function buyShopArtifact() {
+      if (shopArtifact.sold || playerGold < shopArtifact.price) return;
+      setGold(playerGold - shopArtifact.price);
+      if (!hasArtifact(shopArtifact.name)) playerArtifacts.push(shopArtifact.name);
+      updateMenuArtifacts();
+      if (shopArtifact.name === 'Shovel') openShovelPick();
+      shopArtifactsBought++;
+      shopArtifact.sold = true;
+      renderShopArtifact();
     }
 
     function renderShopCards() {
@@ -2209,6 +2430,7 @@
     function openShop() {
       generateShop();
       renderShopCards();
+      renderShopArtifact();
       document.getElementById('shopScreen').classList.remove('hidden');
       window.scrollTo(0, 0);
     }
@@ -2236,16 +2458,20 @@
       if (pick === 'Ambush') {
         isAmbushBattle = true;
         setStatus('Ambush! A stronger enemy attacks!', '#e94560');
-        openBattle(null, 1.5);
+        openBattle('ambush', 1.5);
         return;
       }
       if (pick === 'Stocking up') {
         document.getElementById('eventTitle').textContent = '🎒  Stocking Up';
         document.getElementById('eventBody').textContent =
           'You find a cache of supplies tucked beneath a mossy rock. What do you need most?';
+        const gunBlocked = hasArtifact('Plastic Gun');
+        const healLabel  = gunBlocked
+          ? `Rest and recover — <span style="text-decoration:line-through;color:#e94560">heal 30% max HP</span> <span style="color:#e94560;font-size:1.2em">✕</span>`
+          : `Rest and recover — heal 30% max HP`;
         document.getElementById('eventOptions').innerHTML = `
-          <button class="event-option-btn" onclick="stockingHeal()">
-            Rest and recover — heal 30% max HP
+          <button class="event-option-btn" onclick="stockingHeal()" ${gunBlocked ? 'disabled' : ''}>
+            ${healLabel}
             <span class="event-option-cost" style="color:#4caf50">Free</span>
           </button>
           <button class="event-option-btn" onclick="stockingMaxHp()">
@@ -2266,6 +2492,7 @@
     }
 
     function stockingHeal() {
+      if (hasArtifact('Plastic Gun')) { setStatus('Cannot heal — Plastic Gun is active.', '#e94560'); closeEvent(); return; }
       const healAmt = Math.floor(PLAYER_MAX_HP * 0.3);
       setPlayerHp(playerHp + healAmt);
       setStatus(`Recovered ${healAmt} HP from supplies.`, '#4caf50');
@@ -2280,11 +2507,14 @@
     }
 
     function renderSpaOptions() {
-      const canHeal   = playerGold >= 40;
+      const canHeal   = !hasArtifact('Plastic Gun') && playerGold >= 40;
       const canRemove = playerGold >= 20;
+      const healLabel = hasArtifact('Plastic Gun')
+        ? `Soak in the springs — <span style="text-decoration:line-through;color:#e94560">restore 30% max HP</span> <span style="color:#e94560;font-size:1.2em">✕</span>`
+        : `Soak in the springs — restore 30% max HP`;
       document.getElementById('eventOptions').innerHTML = `
         <button class="event-option-btn" onclick="spaHeal()" ${canHeal ? '' : 'disabled'}>
-          Soak in the springs — restore 30% max HP
+          ${healLabel}
           <span class="event-option-cost">🪙 40 gold</span>
         </button>
         <button class="event-option-btn" onclick="spaRemoveCard()" ${canRemove ? '' : 'disabled'}>
@@ -2294,7 +2524,7 @@
     }
 
     function spaHeal() {
-      if (playerGold < 40) return;
+      if (playerGold < 40 || hasArtifact('Plastic Gun')) return;
       setGold(playerGold - 40);
       const healAmt = Math.floor(PLAYER_MAX_HP * 0.3);
       setPlayerHp(playerHp + healAmt);
@@ -2360,6 +2590,13 @@
         openShop();
       } else if (cmd === 'example.artifact') {
         openArtifacts();
+      } else if (cmd === 'example.boss') {
+        isBossFight = true;
+        openBattle(null, 3);
+      } else if (cmd === 'auto.win.true') {
+        autoWin = true;
+      } else if (cmd === 'auto.win.false') {
+        autoWin = false;
       } else if (cmd === 'Lets.go.gambling') {
         if (!hasArtifact('Dice')) playerArtifacts.push('Dice');
         updateMenuArtifacts();
@@ -2429,6 +2666,12 @@
       playerArtifacts = [];
       isAmbushBattle  = false;
       isBossFight     = false;
+      autoWin         = false;
+      floorNumber        = 1;
+      floorHpMult        = 1.0;
+      floorGoldMult      = 1.0;
+      shopArtifactsBought = 0;
+      updateFloorDisplay();
       updateMenuArtifacts();
       playerDeck.splice(0, playerDeck.length, ...DEFAULT_DECK);
       battleDeck    = shuffle([...DEFAULT_DECK]);
